@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { PORTAL_URL } from '$lib/config';
 	import Icon from './Icon.svelte';
+	import { mainLinks } from '$lib/pages';
 	let mobileMenu: HTMLDetailsElement;
 	function closeMenu(restoreFocus = false) {
 		if (!mobileMenu?.open) return;
@@ -30,13 +31,13 @@
 		<span
 			><i class="flag" aria-hidden="true"></i> Government of Ghana
 			<span class="utility-divider">/</span> Employee Pay Services</span
-		><a href="#safe">Staying safe online</a>
+		><a href="/security/">Staying safe online</a>
 	</div>
 </div>
 {#snippet links()}
-	<a href="#services" onclick={() => closeMenu()}>About</a>
-	<a href="#guide" onclick={() => closeMenu()}>How it works</a>
-	<a href="#help" onclick={() => closeMenu()}>Help & FAQs</a>
+	{#each mainLinks as link}<a href={link.path} onclick={() => closeMenu()}
+			>{link.label}</a
+		>{/each}
 	<a class="button small" href={PORTAL_URL} onclick={() => closeMenu()}
 		>Log in to portal</a
 	>
@@ -45,7 +46,7 @@
 	<div class="container navigation">
 		<a
 			class="brand"
-			href="#main"
+			href="/"
 			aria-label="GoG ePay Services home"
 			onclick={() => closeMenu()}
 			><img src="/assets/portal-logo.svg" width="49" height="49" alt="" /><span

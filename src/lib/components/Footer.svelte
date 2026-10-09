@@ -5,7 +5,7 @@
 <footer>
 	<div class="container footer-main">
 		<div>
-			<a class="brand" href="#main"
+			<a class="brand" href="/"
 				><img
 					src="/assets/portal-logo.svg"
 					width="46"
@@ -18,14 +18,16 @@
 		</div>
 		<div>
 			<h3>Get started</h3>
-			<a href={PORTAL_URL}>Employee portal</a><a href="#guide">Access guide</a
-			><a href="#understand">Understanding your payslip</a>
+			<a href={PORTAL_URL}>Employee portal</a><a href="/help/register/"
+				>Access guide</a
+			><a href="/help/understand-payslip/">Understanding your payslip</a>
 		</div>
 		<div>
 			<h3>Need a hand?</h3>
-			<a href="#help">Help & FAQs</a><a href="#safe">Account safety</a><a
-				href="#services">About the service</a
+			<a href="/help/">Help & FAQs</a><a href="/security/">Account safety</a><a
+				href="/about/">About the service</a
 			>
+			<a href="/contact/">Contact & support</a><a href="/privacy/">Privacy</a>
 		</div>
 	</div>
 	<div class="container footer-bottom">

@@ -1,61 +1,45 @@
-# GoG ePay Services — SvelteKit
+# GoG ePay Services
 
-A Svelte 5 + SvelteKit 2 conversion of the existing GoG ePay landing page. Preserves the design, copy, employee image, portal logo, registration and payslip guides, FAQs and responsive navigation. The page is prerendered to HTML for search engines; Svelte hydrates the menu and guide.
+Official public information website for Government of Ghana employee payslip access, built with Svelte 5, SvelteKit 2 and TypeScript. The searchable website is **gogepayservices.com**; login links open the separate application at **epayslipgh.com**.
 
-## Run on Windows
+## Development and verification
 
-Install Node.js 22.12 or newer (Node 24 LTS recommended). Extract the contents of this project into `C:\Users\bash\Desktop\GoG ePay`, so `package.json` sits directly inside that directory. In PowerShell:
+Use Node.js 22.12 or newer.
 
 ```powershell
-Set-Location 'C:\Users\bash\Desktop\GoG ePay'
 npm ci
-npm run dev -- --open
-```
-
-The console prints the development URL (normally http://localhost:5173).
-
-```powershell
+npm run dev
 npm run check
 npm test
-npm run build
-npm run preview -- --open
+npm run build:preview
+npm run test:seo
+npx playwright install chromium
+npm run test:browser
 ```
 
-`npm ci` runs `svelte-kit sync`, generating `.svelte-kit/tsconfig.json`. Generated folders and dependencies are intentionally excluded from the archive.
+For an approved production package use `npm run build:production`, then rerun `npm run test:seo` and `npm run test:browser`. Both build wrappers write complete static output, hosting headers, domain redirects and a 404 page to `build/`. Preview builds are non-indexable. No Node runtime is needed for hosting.
 
-## Project map
+## Structure
 
-- `src/routes/+page.svelte`: landing-page content and metadata.
-- `src/lib/components/Header.svelte`: responsive Svelte navigation.
-- `src/lib/components/AccessGuide.svelte`: reactive tutorial with arrow-key, Home and End navigation.
-- `src/lib/components/Footer.svelte`: footer links.
-- `src/lib/config.ts`: login destination shared across the page.
-- `src/app.css`: original responsive styling.
-- `static/assets/`: existing employee photograph and application logo.
-- `src/routes/+layout.ts`: prerendering configuration.
+- `src/lib/pages.ts`: typed public content, source references, metadata and related links.
+- `src/lib/components/SEO.svelte`: canonical URLs, social metadata and structured data.
+- `src/routes/[...page]/`: prerendered guide and information pages.
+- `src/lib/tutorial.ts`: shared registration and returning-user instructions.
+- `src/lib/components/AccessGuide.svelte`: accessible desktop tabs, compact mobile selector and video.
+- `scripts/`: deployment packaging, local output server and post-deployment IndexNow submission.
 
-## Login destination
+Eleven public pages cover login, registration, recovery, viewing and understanding payslips, official domain safety, support and privacy. The homepage retains the warmer design and original shared anchors. Both complete tutorial flows remain available without JavaScript.
 
-Currently all login buttons point to `https://gogepayservices.com/`, matching the original website. **Before deploying this landing page at that same root URL, set `PUBLIC_PORTAL_URL` in `.env` to the actual portal/authentication route or subdomain**, otherwise those buttons will return visitors to this landing page. This project does not handle credentials or change Keycloak.
+## Configuration and publication
 
-## Application screenshots
+See [the complete SEO launch guide](docs/SEO-LAUNCH.md) and `.env.example`. Public values are baked into each build. Analytics is disabled by default and requires an approved GA4 ID, a production build and visitor consent before loading. This project does not process credentials, migrate the application or administer Keycloak.
 
-The original website source includes `employee.webp` (AI-generated illustrative photography) and `portal-logo.svg`. The photograph is unchanged; the logo has been optimized without changing its appearance. The local tutorial folder was reviewed during the UI update. Five supplied, obscured screenshots cover the portal, recovery entry, employee number, Ghana Card and profile screens. Tutorial content lives in `src/lib/tutorial.ts`. Payslip review and sign-out instructions remain general because screenshots of those screens were not supplied.
+Reviewer identities must only be added after actual review. Application migration, official contact confirmation, DNS/hosting, search account verification and official external links are release dependencies; no production deployment or search submission is performed by local builds.
 
-To add screenshots, copy suitably redacted files into `static/assets/tutorial/`, then reference them as `/assets/tutorial/your-file.png` in `AccessGuide.svelte`. Do not publish employee identifiers, payslip data, login tokens or personal account information.
+## Tutorial sources and images
 
-## Hosting
+Registration follows CAGD's [Employee PayServices Registration video](https://www.youtube.com/watch?v=wraUiX0C8wk) and its [upgraded payslip announcement](https://www.cagd.gov.gh/wp-content/uploads/2026/02/Press-Release-New-Pay-Slip.pdf). The supplied redacted images cover registration entry, employee number, Ghana Card and profile fields. Phone verification, password/security and final review use video chapter links because local screenshots were not supplied. Payslip dashboard guidance remains general until its controls are verified.
 
-`npm run build` creates a static `build/` directory that can be served by Nginx or another static host. No Node server is required for the output. The complete HTML includes the title, description, page text and FAQs. Configure the canonical URL, sitemap and indexing rules for the final public domain as part of deployment. The existing private hosted preview was not changed by this conversion.
+The employee photograph is illustrative, AI-generated photography. Its responsive variants use the official Svelte image plugin. Keep screenshots free of personal account information and recheck them against the migrated application before release.
 
-## Deployment configuration and accessibility
-
-Copy `.env.example` to `.env` and set `PUBLIC_SITE_URL` to the public landing-page origin. Set `PUBLIC_PORTAL_URL` to the existing sign-in destination. These values are baked into the static build; rebuild after changing them. A same-origin portal root fails the build to prevent circular login links. Portal labels are derived from the configured address.
-
-Canonical and social URLs and the sitemap use `PUBLIC_SITE_URL`. Without it, robots.txt disables indexing and the sitemap contains no URLs. Preview deployments should leave it empty.
-
-The mobile navigation uses a native disclosure and works without JavaScript. With JavaScript, it closes on selection, outside taps, resizing and Escape; Escape restores focus. Both tutorials and all their steps remain readable without JavaScript, with keyboard tabs enabled after hydration.
-
-## Registration tutorial source
-
-The registration instructions follow CAGD’s “Employee PayServices Registration” video at https://www.youtube.com/watch?v=wraUiX0C8wk, reviewed alongside its captions and supplied screenshots. Seven written steps cover the portal entry plus the six account stages; each links to its corresponding video timestamp. The video loads from YouTube’s privacy-enhanced player only after Play is selected, with a direct YouTube fallback link. Phone verification, password/security and final review have video links because corresponding local screenshots were not supplied. The separate four-step guide remains available for existing users.
+Sanity's SEO/AEO best-practices skill informed the implementation; Sanity CMS is not installed.

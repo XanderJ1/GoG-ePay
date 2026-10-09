@@ -1,44 +1,22 @@
 <script lang="ts">
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import AccessGuide from '$lib/components/AccessGuide.svelte';
 	import Icon from '$lib/components/Icon.svelte';
-	import { PORTAL_URL, PORTAL_ADDRESS, SITE_URL } from '$lib/config';
-	const title = 'GoG ePay Services | Your Government of Ghana Payslip';
+	import { PORTAL_URL, PORTAL_ADDRESS } from '$lib/config';
+	import SEO from '$lib/components/SEO.svelte';
+	import OfficialDomains from '$lib/components/OfficialDomains.svelte';
+	import { pages, pageFor } from '$lib/pages';
+	import employeeImage from '$lib/assets/employee.webp?format=avif;webp;jpg&w=480;768;1200;1536&enhanced';
 </script>
 
-<svelte:head>
-	<title>{title}</title>
-	<meta
-		name="description"
-		content="Find your Government of Ghana electronic payslip with GoG ePay Services. Simple steps to register and sign in, plain-language help understanding your pay, and answers when you get stuck."
-	/>
-	<meta name="theme-color" content="#ffffff" />
-	<link rel="icon" href="/assets/portal-logo.svg" type="image/svg+xml" />
-	<meta property="og:title" content={title} />
-	<meta
-		property="og:description"
-		content="Find your electronic payslip, understand your pay, and get friendly help signing in."
-	/>
-	<meta property="og:type" content="website" />
-	<meta name="twitter:card" content="summary_large_image" />
-	{#if SITE_URL}
-		<link rel="canonical" href="{SITE_URL}/" />
-		<meta property="og:url" content="{SITE_URL}/" />
-		<meta property="og:image" content="{SITE_URL}/assets/employee.webp" />
-	{/if}
-</svelte:head>
+<SEO page={pages[0]} />
 
 <Header />
 <main id="main" tabindex="-1">
 	<section class="hero">
 		<div class="hero-copy">
-			<p class="eyebrow">WELCOME BACK. WE KNOW YOUR TIME IS BUSY.</p>
-			<h1>
-				Thank you for<br />serving Ghana.<br /><em
-					>Your payslip is ready when you are.</em
-				>
-			</h1>
+			<p class="eyebrow">WELCOME TO GOG EPAY SERVICES</p>
+			<h1>Official Government of Ghana <em>E-Payslip Services</em></h1>
 			<p class="intro">
 				No queues, no chasing anyone down. Sign in to the portal and see your
 				electronic payslip in a few quiet minutes.
@@ -54,11 +32,10 @@
 			</p>
 		</div>
 		<div class="hero-photo">
-			<img
-				src="/assets/employee.webp"
-				alt="A smiling professional checking her phone at a courtyard desk"
-				width="1536"
-				height="1024"
+			<enhanced:img
+				src={employeeImage}
+				alt="A professional checking her phone at a courtyard desk"
+				sizes="(max-width: 760px) 100vw, 50vw"
 				fetchpriority="high"
 			/>
 			<div class="photo-caption">
@@ -113,7 +90,20 @@
 			</article>
 		</div>
 	</section>
-	<AccessGuide />
+	<section class="section container" id="guide">
+		<p class="eyebrow">OFFICIAL GUIDES</p>
+		<h2>Get set up. Find your payslip.</h2>
+		<p>Follow the CAGD registration tutorial or choose the help you need.</p>
+		<div class="guide-card-grid">
+			{#each ['/help/register/', '/help/sign-in/', '/help/reset-password/', '/help/view-payslip/'] as path}{@const guide =
+					pageFor(path)}{#if guide}<a class="guide-card" href={guide.path}
+						><h3>{guide.heading}</h3>
+						<p>{guide.description}</p></a
+					>{/if}{/each}
+		</div>
+		<p><a href="/help/">See all help & guides</a></p>
+		<OfficialDomains />
+	</section>
 	<section class="section container understand" id="understand">
 		<div>
 			<p class="eyebrow">NO ACCOUNTING DEGREE NEEDED</p>
@@ -250,10 +240,10 @@
 			<details>
 				<summary>I’m new. How do I get access?</summary>
 				<p>
-					Follow the <a href="#guide">registration tutorial</a>. You’ll verify
-					your employee number and Ghana Card, confirm your phone number and set
-					up your password. If any greyed-out profile details are wrong, ask your
-					HR department to correct them.
+					Follow the <a href="/help/register/">registration tutorial</a>. You’ll
+					verify your employee number and Ghana Card, confirm your phone number
+					and set up your password. If any greyed-out profile details are wrong,
+					ask your HR department to correct them.
 				</p>
 			</details>
 			<details>
@@ -284,7 +274,8 @@
 		<div class="container">
 			<p class="eyebrow">READY WHEN YOU ARE</p>
 			<h2>Your payslip is a few clicks away.<br />Then the day is yours.</h2>
-			<a class="button yellow" href={PORTAL_URL}>Take me to GoG ePay Services</a>
+			<a class="button yellow" href={PORTAL_URL}>Take me to GoG ePay Services</a
+			>
 			<p>You’ll continue to {PORTAL_ADDRESS}</p>
 		</div>
 	</section>

@@ -5,7 +5,7 @@
 	--accent: #efc87d;
 	--ink: #392b24;
 	--muted: #715e51;
-	--faint: #8f7c6e;
+	--faint: #776456;
 	--line: #eadfd4;
 	--soft: #fbf7f2;
 }
@@ -261,7 +261,13 @@ header {
 	border-radius: 24px;
 	overflow: hidden;
 }
-.hero-photo > img {
+.hero-photo > picture {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+.hero-photo img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -1113,7 +1119,7 @@ footer {
 		height: 400px;
 		border-radius: 20px;
 	}
-	.hero-photo > img {
+	.hero-photo img {
 		object-position: 50% 47%;
 	}
 	.photo-caption {

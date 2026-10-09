@@ -8,11 +8,18 @@
 	} from '$lib/tutorial';
 
 	type Mode = 'registration' | 'payslip';
-	const modes: Mode[] = ['registration', 'payslip'];
+	let {
+		initialMode = 'registration',
+		singleMode = false,
+	}: { initialMode?: Mode; singleMode?: boolean } = $props();
+	const modes = $derived<Mode[]>(
+		singleMode ? [initialMode] : ['registration', 'payslip'],
+	);
 	const stepsFor = (key: Mode) =>
 		key === 'registration' ? registrationSteps : payslipSteps;
 
-	let mode = $state<Mode>('registration');
+	const startingMode = () => initialMode;
+	let mode = $state<Mode>(startingMode());
 	let active = $state(0);
 	let enhanced = $state(false);
 	let videoPlaying = $state(false);
@@ -25,7 +32,14 @@
 	async function goTo(index: number) {
 		active = index;
 		await tick();
-		document.getElementById(`guide-panel-${mode}-${index}`)?.focus();
+		const panel = document.getElementById(`guide-panel-${mode}-${index}`);
+		panel?.focus({ preventScroll: true });
+		panel?.scrollIntoView({ block: 'start', behavior: 'instant' });
+	}
+	async function playVideo() {
+		videoPlaying = true;
+		await tick();
+		document.getElementById('registration-video')?.focus();
 	}
 	function chooseMode(next: Mode) {
 		mode = next;
@@ -73,13 +87,14 @@
 		</div>
 		<div
 			class="guide-mode"
-			hidden={!enhanced}
+			hidden={!enhanced || singleMode}
 			role="group"
 			aria-label="Choose a tutorial"
 		>
 			<button
 				aria-pressed={mode === 'registration'}
-				onclick={() => chooseMode('registration')}>I’m new: register my account</button
+				onclick={() => chooseMode('registration')}
+				>I’m new: register my account</button
 			>
 			<button
 				aria-pressed={mode === 'payslip'}
@@ -87,53 +102,56 @@
 				>I have an account: find my payslip</button
 			>
 		</div>
-		<div class="guide-video">
-			<div class="guide-video-copy">
-				<p class="eyebrow">PREFER TO WATCH?</p>
-				<h3>Employee PayServices Registration</h3>
-				<p>
-					This 2-minute registration tutorial from CAGD shows every screen. Watch
-					it first, or follow the written steps below.
-				</p>
-				<a href={REGISTRATION_VIDEO_URL} target="_blank" rel="noreferrer"
-					>Watch on YouTube · 2:02</a
-				>
-			</div>
-			<div class="guide-video-player">
-				{#if videoPlaying}
-					<iframe
-						src="https://www.youtube-nocookie.com/embed/wraUiX0C8wk?autoplay=1"
-						title="CAGD Employee PayServices Registration tutorial"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-						referrerpolicy="strict-origin-when-cross-origin"
-						allowfullscreen
-					></iframe>
-				{:else}
-					<button
-						class="video-play"
-						aria-label="Play CAGD registration tutorial"
-						onclick={() => (videoPlaying = true)}
+		{#if !singleMode || initialMode === 'registration'}
+			<div class="guide-video">
+				<div class="guide-video-copy">
+					<p class="eyebrow">PREFER TO WATCH?</p>
+					<h3>Employee PayServices Registration</h3>
+					<p>
+						This 2-minute registration tutorial from CAGD shows every screen.
+						Watch it first, or follow the written steps below.
+					</p>
+					<a href={REGISTRATION_VIDEO_URL} target="_blank" rel="noreferrer"
+						>Watch on YouTube · 2:02</a
 					>
-						<img
-							src="/assets/tutorial/sign-in-help.webp"
-							alt=""
-							width="768"
-							height="432"
-							loading="lazy"
-						/>
-						<span
-							><svg
-								width="28"
-								height="28"
-								viewBox="0 0 24 24"
-								aria-hidden="true"
-								><path fill="currentColor" d="m8 5 11 7-11 7z" /></svg
-							>Play tutorial</span
+				</div>
+				<div class="guide-video-player">
+					{#if videoPlaying}
+						<iframe
+							id="registration-video"
+							src="https://www.youtube-nocookie.com/embed/wraUiX0C8wk?autoplay=1"
+							title="CAGD Employee PayServices Registration tutorial"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+						></iframe>
+					{:else}
+						<button
+							class="video-play"
+							aria-label="Play tutorial: CAGD registration"
+							onclick={playVideo}
 						>
-					</button>
-				{/if}
+							<img
+								src="/assets/tutorial/sign-in-help.webp"
+								alt=""
+								width="768"
+								height="432"
+								loading="lazy"
+							/>
+							<span
+								><svg
+									width="28"
+									height="28"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									><path fill="currentColor" d="m8 5 11 7-11 7z" /></svg
+								>Play tutorial</span
+							>
+						</button>
+					{/if}
+				</div>
 			</div>
-		</div>
+		{/if}
 		{#each modes as key (key)}
 			{#if !enhanced || mode === key}
 				{@const list = stepsFor(key)}
@@ -143,6 +161,17 @@
 						: 'Sign in & find your payslip'}
 				</h3>
 				<div class="walkthrough" class:enhanced>
+					{#if enhanced}<label class="mobile-step-picker"
+							>Choose a step
+							<select
+								value={active}
+								onchange={(event) => goTo(Number(event.currentTarget.value))}
+							>
+								{#each list as step, i}<option value={i}
+										>{i + 1}. {step.title}</option
+									>{/each}
+							</select>
+						</label>{/if}
 					<div
 						class="guide-tabs"
 						hidden={!enhanced}
@@ -159,7 +188,7 @@
 								aria-selected={active === i}
 								aria-controls="guide-panel-{key}-{i}"
 								tabindex={active === i ? 0 : -1}
-								onclick={() => (active = i)}
+								onclick={() => goTo(i)}
 								onkeydown={(event) => handleKey(event, i)}
 								><span>{pad(i + 1)}</span><span
 									>{step.title}<small>{step.subtitle}</small></span
@@ -173,14 +202,16 @@
 								role="tabpanel"
 								id="guide-panel-{key}-{i}"
 								aria-label={enhanced ? undefined : step.heading}
-								aria-labelledby={enhanced ? `guide-tab-${key}-${i}` : undefined}
+								aria-labelledby={enhanced
+									? `guide-heading-${key}-${i}`
+									: undefined}
 								tabindex={enhanced ? 0 : undefined}
 								hidden={enhanced && active !== i}
 							>
 								<p class="step-label">
 									STEP {pad(i + 1)} / {list.length}
 								</p>
-								<h3>{step.heading}</h3>
+								<h3 id="guide-heading-{key}-{i}">{step.heading}</h3>
 								<p>{step.description}</p>
 								{#if step.image}
 									<figure class="tutorial-image">
@@ -221,9 +252,9 @@
 										href="{REGISTRATION_VIDEO_URL}&t={step.videoStart}s"
 										target="_blank"
 										rel="noreferrer"
-										>Watch this step · {Math.floor(
-											step.videoStart / 60,
-										)}:{pad(step.videoStart % 60)}</a
+										>Watch this step · {Math.floor(step.videoStart / 60)}:{pad(
+											step.videoStart % 60,
+										)}</a
 									>
 								{/if}
 								{#if enhanced}
