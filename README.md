@@ -17,7 +17,9 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-For an approved production package use `npm run build:production`, then rerun `npm run test:seo` and `npm run test:browser`. Both build wrappers write complete static output, hosting headers, domain redirects and a 404 page to `build/`. Preview builds are non-indexable. No Node runtime is needed for hosting.
+For a production package use `npm run build` (or `npm run build:production`), then rerun `npm run test:seo` and `npm run test:browser`. Local and Cloudflare builds write to `build/`; Vercel builds use `.vercel/output/static` and preserve SvelteKit's generated routing configuration. Preview builds are non-indexable, including Vercel preview deployments. No Node runtime is needed for hosting.
+
+On Vercel, keep the build command as `npm run build` and leave the output-directory override unset so Vercel uses its generated Build Output API configuration. Set `www.epayslipgh.com` as the production domain and configure `epayslipgh.com` to redirect to it in Vercel's domain settings. After deploying, check `/sitemap.xml` for all eleven public URLs. To check a Vercel build locally, set `SEO_OUTPUT_DIR=.vercel/output/static` when running `npm run test:seo`.
 
 ## Structure
 

@@ -12,12 +12,16 @@ const compiled = ts.transpileModule(source, {
 const { pages } = await import(
 	'data:text/javascript;base64,' + Buffer.from(compiled).toString('base64')
 );
-const sitemap = await fs.readFile('build/sitemap.xml', 'utf8');
+const outputDir = process.env.SEO_OUTPUT_DIR || 'build';
+const sitemap = await fs.readFile(outputDir + '/sitemap.xml', 'utf8');
 const production = sitemap.includes('<loc>');
 const seenTitles = new Set();
 for (const page of pages) {
 	test(`${page.path} has complete HTML and consistent metadata`, async () => {
-		const html = await fs.readFile('build' + page.path + 'index.html', 'utf8');
+		const html = await fs.readFile(
+			outputDir + page.path + 'index.html',
+			'utf8',
+		);
 		assert.equal((html.match(/<h1[\s>]/g) || []).length, 1);
 		assert.ok(html.replace(/<[^>]+>/g, '').includes(page.heading));
 		assert.ok(
@@ -66,7 +70,7 @@ for (const page of pages) {
 	});
 }
 test('deployment files and social image exist', async () => {
-	const robots = await fs.readFile('build/robots.txt', 'utf8');
+	const robots = await fs.readFile(outputDir + '/robots.txt', 'utf8');
 	assert.match(
 		robots,
 		production
@@ -78,8 +82,31 @@ test('deployment files and social image exist', async () => {
 			(sitemap.match(/<loc>/g) || []).length,
 			pages.filter((page) => page.indexable).length,
 		);
-	await fs.access('build/assets/social-card.png');
-	const headers = await fs.readFile('build/_headers', 'utf8');
+	await fs.access(outputDir + '/assets/social-card.png');
+	const headers = await fs.readFile(outputDir + '/_headers', 'utf8');
 	assert.equal(headers.includes('X-Robots-Tag: noindex'), !production);
-	assert.match(await fs.readFile('build/404.html', 'utf8'), /noindex,follow/);
+	assert.match(
+		await fs.readFile(outputDir + '/404.html', 'utf8'),
+		/noindex,follow/,
+	);
+	if (outputDir === '.vercel/output/static') {
+		const config = JSON.parse(
+			await fs.readFile('.vercel/output/config.json', 'utf8'),
+		);
+		assert.equal(config.version, 3);
+		assert.equal(
+			config.routes[0].headers['X-Robots-Tag'],
+			production ? undefined : 'noindex, nofollow',
+		);
+		assert.ok(config.routes.some((route) => route.handle === 'filesystem'));
+		assert.ok(
+			config.routes.some((route) => route.src === '/_app/immutable/.+'),
+		);
+		assert.deepEqual(config.routes.at(-1), {
+			src: '/.*',
+			dest: '/404.html',
+			status: 404,
+		});
+		assert.ok(Object.keys(config.overrides).length > 0);
+	}
 });
