@@ -1,6 +1,6 @@
 # GoG ePay Services
 
-Official public information website for Government of Ghana employee payslip access, built with Svelte 5, SvelteKit 2 and TypeScript. The searchable website is **gogepayservices.com**; login links open the separate application at **epayslipgh.com**.
+Official public information website for Government of Ghana employee payslip access, built with Svelte 5, SvelteKit 2 and TypeScript. The searchable website is **www.epayslipgh.com**; login links open the separate application at **gogepayservices.com**.
 
 ## Development and verification
 

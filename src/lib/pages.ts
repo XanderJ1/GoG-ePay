@@ -264,7 +264,7 @@ export const pages: PublicPage[] = [
 		description:
 			'Check the official GoG ePay website and employee application addresses. Protect your password, verification codes and personal payslip information.',
 		summary:
-			'Start at gogepayservices.com and use its login button to reach the employee application. Check the complete address before entering account details.',
+			'Start at www.epayslipgh.com and use its login button to reach the employee application. Check the complete address before entering account details.',
 		sections: [
 			{
 				heading: 'How do I check a payslip link?',

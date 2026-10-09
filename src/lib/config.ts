@@ -1,7 +1,7 @@
 // Set these public deployment values in .env before building.
 import * as publicEnv from '$env/static/public';
 const env: Record<string, string> = publicEnv;
-export const PORTAL_URL = env.PUBLIC_PORTAL_URL || 'https://epayslipgh.com/';
+export const PORTAL_URL = env.PUBLIC_PORTAL_URL || 'https://gogepayservices.com/';
 const portal = new URL(PORTAL_URL);
 if (portal.protocol !== 'https:')
 	throw new Error('PUBLIC_PORTAL_URL must use HTTPS.');

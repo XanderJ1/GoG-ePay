@@ -1,7 +1,7 @@
 // Invoke only after the matching production build is successfully deployed.
 import fs from 'node:fs/promises';
 const key = process.env.INDEXNOW_KEY;
-const origin = 'https://gogepayservices.com';
+const origin = 'https://www.epayslipgh.com';
 const paths = process.argv.slice(2);
 if (!key || !/^[a-zA-Z0-9-]{8,128}$/.test(key) || !paths.length) {
 	throw new Error(

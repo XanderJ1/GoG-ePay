@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PORTAL_URL, PORTAL_ADDRESS } from '$lib/config';
+	import { PORTAL_URL, PORTAL_ADDRESS, SITE_URL } from '$lib/config';
 </script>
 
 <aside class="official-domains" aria-label="Official service addresses">
@@ -7,7 +7,7 @@
 	<dl>
 		<div>
 			<dt>Information & guides</dt>
-			<dd><a href="https://gogepayservices.com/">gogepayservices.com</a></dd>
+			<dd><a href={SITE_URL || 'https://www.epayslipgh.com'}>www.epayslipgh.com</a></dd>
 		</div>
 		<div>
 			<dt>Employee application</dt>

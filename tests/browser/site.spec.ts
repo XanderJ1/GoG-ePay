@@ -69,7 +69,7 @@ test('guide navigation updates metadata and desktop keyboard tabs', async ({
 	);
 	await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
 		'href',
-		'https://gogepayservices.com/help/sign-in/',
+		'https://www.epayslipgh.com/help/sign-in/',
 	);
 	await expect(page.locator('.guide-video')).toHaveCount(0);
 	await page.locator('#guide-tab-payslip-0').press('End');

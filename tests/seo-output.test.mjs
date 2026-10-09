@@ -25,10 +25,10 @@ for (const page of pages) {
 		);
 		assert.equal((html.match(/name="description"/g) || []).length, 1);
 		assert.equal((html.match(/rel="canonical"/g) || []).length, 1);
-		assert.ok(html.includes(`href="https://gogepayservices.com${page.path}"`));
+		assert.ok(html.includes(`href="https://www.epayslipgh.com${page.path}"`));
 		assert.equal(seenTitles.has(page.title), false);
 		seenTitles.add(page.title);
-		assert.match(html, /https:\/\/epayslipgh.com\//);
+		assert.match(html, /https:\/\/gogepayservices.com\//);
 		assert.match(
 			html,
 			production
@@ -44,14 +44,14 @@ for (const page of pages) {
 		const graph = JSON.parse(blocks[0][1])['@graph'];
 		assert.ok(
 			graph.some(
-				(item) => item.url === 'https://gogepayservices.com' + page.path,
+				(item) => item.url === 'https://www.epayslipgh.com' + page.path,
 			),
 		);
 		for (const section of page.sections)
 			assert.ok(html.includes(section.heading));
 		if (production)
 			assert.ok(
-				sitemap.includes(`<loc>https://gogepayservices.com${page.path}</loc>`),
+				sitemap.includes(`<loc>https://www.epayslipgh.com${page.path}</loc>`),
 			);
 		for (const match of html.matchAll(/href="(\/[^"#?]*)(?:[#?][^"]*)?"/g)) {
 			const href = match[1];
@@ -70,7 +70,7 @@ test('deployment files and social image exist', async () => {
 	assert.match(
 		robots,
 		production
-			? /Allow: \/\nSitemap: https:\/\/gogepayservices.com\/sitemap.xml/
+			? /Allow: \/\nSitemap: https:\/\/www.epayslipgh.com\/sitemap.xml/
 			: /Disallow: \//,
 	);
 	if (production)

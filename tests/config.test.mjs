@@ -23,8 +23,8 @@ async function loadConfig(env) {
 }
 test('default destination uses the separate employee application', async () => {
 	const config = await loadConfig({});
-	assert.equal(config.PORTAL_URL, 'https://epayslipgh.com/');
-	assert.equal(config.PORTAL_ADDRESS, 'epayslipgh.com');
+	assert.equal(config.PORTAL_URL, 'https://gogepayservices.com/');
+	assert.equal(config.PORTAL_ADDRESS, 'gogepayservices.com');
 	assert.equal(config.SITE_URL, '');
 });
 test('labels include a configured sign-in path', async () => {
@@ -117,14 +117,14 @@ test('indexable production requires a public origin', async () => {
 		/PUBLIC_SITE_URL is required/,
 	);
 	const config = await loadConfig({
-		PUBLIC_SITE_URL: 'https://gogepayservices.com',
+		PUBLIC_SITE_URL: 'https://www.epayslipgh.com',
 		PUBLIC_INDEXING: 'true',
 	});
 	assert.equal(config.INDEXABLE, true);
 });
 test('analytics requires production indexing, approval and a valid measurement ID', async () => {
 	const settings = {
-		PUBLIC_SITE_URL: 'https://gogepayservices.com',
+		PUBLIC_SITE_URL: 'https://www.epayslipgh.com',
 		PUBLIC_ANALYTICS_ID: 'G-TEST123',
 		PUBLIC_ANALYTICS_APPROVED: 'true',
 	};

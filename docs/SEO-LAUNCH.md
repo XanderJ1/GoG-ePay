@@ -2,7 +2,7 @@
 
 ## What is implemented
 
-The public site stays at **https://gogepayservices.com/**. Login links use the stable application entry **https://epayslipgh.com/**. Keycloak authentication is started by that application, not by a saved authorization request.
+The public information website is **https://www.epayslipgh.com/**. Login links use the existing stable application entry **https://gogepayservices.com/**. Keycloak authentication is started by that application, not by a saved authorization request.
 
 Eleven public pages are prerendered to complete HTML using SvelteKit. A typed page registry supplies metadata, sitemap entries and related navigation. The site has canonical URLs, Open Graph, JSON-LD, responsive hero images and a branded social card. Sanity's `seo-aeo-best-practices` skill informed the content, source and review approach; no Sanity CMS is required.
 
@@ -29,7 +29,7 @@ The build commands default to the confirmed domain roles. Explicit environment v
 
 ## Production release dependencies
 
-1. Confirm ownership and TLS for epayslipgh.com. Deploy the existing application there and update Keycloak valid redirect URIs, application callbacks and any required Web Origins. Test registration, returning login, recovery and logout using an authorized test account. The application source and Keycloak administration are outside this repository.
+1. Confirm ownership and TLS for www.epayslipgh.com. Keep the existing application at gogepayservices.com and preserve its working Keycloak callback configuration. Test registration, returning login, recovery and logout using an authorized test account. The application source and Keycloak administration are outside this repository.
 2. Have the authorized CAGD reviewer verify every guide, domain and linked support route. Supply the actual reviewer name; set `reviewer` on each reviewed registry entry only after approval. Revision dates currently record this content implementation, not government review. Check supplied screenshot redaction and whether old images match the migrated application.
 3. Verify official organizational wording and the CAGD identity in structured data. Current evidence: CAGD's published upgraded payslip announcement names gogepayservices.com and links the supplied tutorial. Never invent staff profiles, ratings, endorsements or review credentials.
 4. Verify the current CAGD contact page. The public guides link that page rather than copying potentially outdated telephone numbers.
@@ -37,17 +37,17 @@ The build commands default to the confirmed domain roles. Explicit environment v
 
 ## Cloudflare Pages deployment
 
-Create or reuse the public site's Cloudflare Pages project, preserving the existing site's URLs and account ownership. Framework: SvelteKit static; output directory: `build`; build command: `npm run build:production`. Set `PUBLIC_SITE_URL=https://gogepayservices.com` and `PUBLIC_PORTAL_URL=https://epayslipgh.com/` in production.
+Create or reuse the public site's Cloudflare Pages project, preserving the existing site's URLs and account ownership. Framework: SvelteKit static; output directory: `build`; build command: `npm run build:production`. Set `PUBLIC_SITE_URL=https://www.epayslipgh.com` and `PUBLIC_PORTAL_URL=https://gogepayservices.com/` in production.
 
 For preview branches set build command `npm run build:preview` and protect their domains using Cloudflare Access. The generated `_headers` apply noindex to previews, but access protection must be configured in the Cloudflare account. Do not share indexable production output on a public preview hostname.
 
-Attach apex and www domains, enable HTTPS, verify certificate issuance, and enable an edge redirect from HTTP to HTTPS. `_redirects` consolidates www to apex. Verify directory routes normalize to a trailing slash with a single redirect and that an unknown URL returns HTTP 404 rather than the homepage. Check `_app/immutable/` cache headers on the actual CDN.
+Attach apex and www domains, enable HTTPS, verify certificate issuance, and enable an edge redirect from HTTP to HTTPS. `_redirects` consolidates apex to www. Verify directory routes normalize to a trailing slash with a single redirect and that an unknown URL returns HTTP 404 rather than the homepage. Check `_app/immutable/` cache headers on the actual CDN.
 
 Before replacing the current public entry point, inventory existing routes and backlinks. Preserve root and the homepage anchors `#main`, `#services`, `#guide`, `#understand`, `#safe`, `#help`. Add exact permanent redirects for any retired public routes after confirming their replacements; do not blanket-redirect all missing pages to the homepage. Keep a copy of the prior approved deployment for rollback.
 
 ## Search accounts and baseline
 
-Verify the gogepayservices.com domain property in Google Search Console and Bing Webmaster Tools using DNS. Reuse any existing verified accounts and history. Keep Search Console verification for the application/authentication domains available for diagnosing unexpected indexing; do not submit login or private application pages in the public site's sitemap.
+Verify the epayslipgh.com domain property in Google Search Console and Bing Webmaster Tools using DNS. Reuse any existing verified accounts and history. Keep Search Console verification for the application/authentication domains available for diagnosing unexpected indexing; do not submit login or private application pages in the public site's sitemap.
 
 Before release, record the site's current URL inspection, robots, canonical selection, indexed URLs and inbound links. Use Ghana/mobile segmentation where available. Establish the same query set in both engines:
 
@@ -60,7 +60,7 @@ Before release, record the site's current URL inspection, robots, canonical sele
 
 Capture competing result URLs, intent, domain confusion and outdated instructions. Search samples observed during planning included gogpayslip.com login pages, CAGD pages, instructional videos and news reporting with inconsistent domain references. These are not a precise Ghana rank report, and their presence does not establish fraud. Do not report a domain merely because it competes in search.
 
-After release submit **https://gogepayservices.com/sitemap.xml** to both engines. Inspect homepage, registration and sign-in URLs, confirm rendered HTML and selected canonicals, and request discovery where supported. Submission is not a ranking or indexing guarantee. Do not use Google's restricted Indexing API for these ordinary guide pages.
+After release submit **https://www.epayslipgh.com/sitemap.xml** to both engines. Inspect homepage, registration and sign-in URLs, confirm rendered HTML and selected canonicals, and request discovery where supported. Submission is not a ranking or indexing guarantee. Do not use Google's restricted Indexing API for these ordinary guide pages.
 
 ## Official links and communications
 
@@ -76,7 +76,7 @@ Before enabling, configure the GA4 web stream: disable enhanced measurement and 
 
 ## IndexNow
 
-This project includes a post-deployment submission helper, not an automatically running task. Generate an IndexNow key, serve its plain-text value at `https://gogepayservices.com/<key>.txt`, verify it is reachable, and set `INDEXNOW_KEY` in deployment secrets. After the matching production build is successfully deployed:
+This project includes a post-deployment submission helper, not an automatically running task. Generate an IndexNow key, serve its plain-text value at `https://www.epayslipgh.com/<key>.txt`, verify it is reachable, and set `INDEXNOW_KEY` in deployment secrets. After the matching production build is successfully deployed:
 
 ```powershell
 npm run indexnow -- /help/register/ /help/sign-in/

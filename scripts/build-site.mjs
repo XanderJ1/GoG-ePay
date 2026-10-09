@@ -3,8 +3,8 @@ import fs from 'node:fs/promises';
 const production = process.argv.includes('--production');
 const env = {
 	...process.env,
-	PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL || 'https://gogepayservices.com',
-	PUBLIC_PORTAL_URL: process.env.PUBLIC_PORTAL_URL || 'https://epayslipgh.com/',
+	PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL || 'https://www.epayslipgh.com',
+	PUBLIC_PORTAL_URL: process.env.PUBLIC_PORTAL_URL || 'https://gogepayservices.com/',
 	PUBLIC_INDEXING: production ? 'true' : 'false',
 };
 const result = spawnSync(
@@ -30,7 +30,7 @@ await fs.writeFile(
 );
 await fs.writeFile(
 	'build/_redirects',
-	'https://www.gogepayservices.com/* https://gogepayservices.com/:splat 301\nhttp://gogepayservices.com/* https://gogepayservices.com/:splat 301\nhttp://www.gogepayservices.com/* https://gogepayservices.com/:splat 301\n',
+	'https://epayslipgh.com/* https://www.epayslipgh.com/:splat 301\nhttp://www.epayslipgh.com/* https://www.epayslipgh.com/:splat 301\nhttp://epayslipgh.com/* https://www.epayslipgh.com/:splat 301\n',
 );
 await fs.writeFile(
 	'build/404.html',
