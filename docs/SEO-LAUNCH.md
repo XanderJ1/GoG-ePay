@@ -25,7 +25,7 @@ npm run test:browser
 
 `build:preview` writes noindex meta tags, noindex response headers and an empty sitemap. `build:production` enables indexing, requires a valid public origin and emits the complete sitemap. Both generate hosting headers, domain redirects and a genuine 404 page. The output is `build/`; no Node runtime is required.
 
-The build commands default to the confirmed domain roles. Explicit environment values override them. Configuration is baked into the output: rebuild after changes. `.env.example` documents all settings. Ordinary `npm run build` is suitable for checking compilation; use the wrapper commands above for a complete deployment package.
+The build commands default to the confirmed domain roles. Explicit environment values override them. Configuration is baked into the output: rebuild after changes. `.env.example` documents all settings. Ordinary `npm run build` now generates the complete indexable production package. Use `npm run build:preview` explicitly for non-indexable preview deployments. For the development server, set the confirmed URLs and `PUBLIC_INDEXING=true` in your local `.env` to inspect the populated sitemap; restart the server after changing environment values.
 
 ## Production release dependencies
 
