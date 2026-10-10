@@ -11,6 +11,8 @@ const env = {
 	PUBLIC_PORTAL_URL:
 		process.env.PUBLIC_PORTAL_URL || 'https://gogepayservices.com/',
 	PUBLIC_INDEXING: production ? 'true' : 'false',
+	PUBLIC_ANALYTICS_ID: process.env.PUBLIC_ANALYTICS_ID || 'G-XLNK77DXEZ',
+	PUBLIC_ANALYTICS_APPROVED: process.env.PUBLIC_ANALYTICS_APPROVED || 'true',
 };
 const result = spawnSync(
 	process.execPath,

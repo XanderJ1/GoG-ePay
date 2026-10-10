@@ -34,7 +34,7 @@ Eleven public pages cover login, registration, recovery, viewing and understandi
 
 ## Configuration and publication
 
-See [the complete SEO launch guide](docs/SEO-LAUNCH.md) and `.env.example`. Public values are baked into each build. Analytics is disabled by default and requires an approved GA4 ID, a production build and visitor consent before loading. This project does not process credentials, migrate the application or administer Keycloak.
+See [the complete SEO launch guide](docs/SEO-LAUNCH.md) and `.env.example`. Public values are baked into each build. Production builds use GA4 measurement ID `G-XLNK77DXEZ`; analytics loads only after visitor consent. Preview builds disable it, and `PUBLIC_ANALYTICS_APPROVED=false` disables it for production too. This project does not process credentials, migrate the application or administer Keycloak.
 
 Reviewer identities must only be added after actual review. Application migration, official contact confirmation, DNS/hosting, search account verification and official external links are release dependencies; no production deployment or search submission is performed by local builds.
 
@@ -45,3 +45,4 @@ Registration follows CAGD's [Employee PayServices Registration video](https://ww
 The employee photograph is illustrative, AI-generated photography. Its responsive variants use the official Svelte image plugin. Keep screenshots free of personal account information and recheck them against the migrated application before release.
 
 Sanity's SEO/AEO best-practices skill informed the implementation; Sanity CMS is not installed.
+

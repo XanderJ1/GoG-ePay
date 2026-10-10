@@ -30,7 +30,7 @@
 	function start() {
 		if (!ANALYTICS_ENABLED || ready) return;
 		const win = measurementWindow();
-		win.dataLayer = [];
+		win.dataLayer ||= [];
 		send('js', new Date());
 		send('config', ANALYTICS_ID, {
 			send_page_view: false,

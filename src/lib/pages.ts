@@ -378,7 +378,7 @@ export const pages: PublicPage[] = [
 			{
 				heading: 'Website visits',
 				paragraphs: [
-					'The site has no account form and does not currently load Google Analytics or advertising scripts. The hosting provider may process ordinary request information, such as IP address and browser details, to deliver and secure the website.',
+					'The site has no account form. Optional Google Analytics loads only after you allow analytics. The hosting provider may process ordinary request information, such as IP address and browser details, to deliver and secure the website.',
 				],
 			},
 			{
@@ -394,9 +394,10 @@ export const pages: PublicPage[] = [
 				],
 			},
 			{
-				heading: 'Search measurement and future analytics',
+				heading: 'Search measurement and optional analytics',
 				paragraphs: [
-					'The operator may use aggregate Google Search Console and Bing Webmaster Tools reports to understand search visibility. Any future visitor analytics must be configured and disclosed before activation. Credentials, identity numbers, authentication parameters and payslip contents must not be included in analytics events.',
+					'The operator uses Google Search Console reports to understand search visibility. If you allow optional Google Analytics, it measures public page visits and clicks that open the employee portal. Google Analytics may set cookies and process browser and device information. You can decline analytics and continue using all guides, or change your choice using the control on this page.',
+					'Analytics events use public page paths without query strings or fragments. Credentials, identity numbers, authentication parameters and payslip contents are not included in these events. Advertising personalisation and Google Signals are disabled in the website tag.',
 				],
 			},
 			{
