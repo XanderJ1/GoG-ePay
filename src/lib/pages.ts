@@ -378,7 +378,7 @@ export const pages: PublicPage[] = [
 			{
 				heading: 'Website visits',
 				paragraphs: [
-					'The site has no account form. Optional Google Analytics loads only after you allow analytics. The hosting provider may process ordinary request information, such as IP address and browser details, to deliver and secure the website.',
+					'The site has no account form. Google Tag Manager loads when you visit to manage website tags and receives ordinary request information. The website’s Google Analytics integration loads only after you allow analytics. The hosting provider may process ordinary request information, such as IP address and browser details, to deliver and secure the website.',
 				],
 			},
 			{

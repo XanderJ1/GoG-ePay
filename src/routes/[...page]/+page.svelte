@@ -53,6 +53,8 @@
 						links, identity numbers or payslip data. The hosting provider also
 						processes ordinary request information to deliver and secure the
 						website.
+						Google Tag Manager loads when you visit to manage website tags
+						and receives ordinary request information.
 					</p>
 					<p>
 						<button

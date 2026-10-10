@@ -31,6 +31,7 @@
 		if (!ANALYTICS_ENABLED || ready) return;
 		const win = measurementWindow();
 		win.dataLayer ||= [];
+		send('consent', 'update', { analytics_storage: 'granted' });
 		send('js', new Date());
 		send('config', ANALYTICS_ID, {
 			send_page_view: false,

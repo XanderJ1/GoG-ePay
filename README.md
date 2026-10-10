@@ -46,3 +46,6 @@ The employee photograph is illustrative, AI-generated photography. Its responsiv
 
 Sanity's SEO/AEO best-practices skill informed the implementation; Sanity CMS is not installed.
 
+
+Google Tag Manager container `GTM-N27FCQBP` is included once in the shared HTML head and its noscript iframe immediately after the body opens. Consent defaults to denied; the existing analytics choice grants analytics storage. GA4 `G-XLNK77DXEZ` remains managed by the website integration: do not also configure that measurement ID in GTM, which would duplicate tracking. Preview HTML also contains GTM; restrict published container triggers to the production hostname and respect visitor consent.
+

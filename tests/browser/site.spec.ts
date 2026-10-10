@@ -30,8 +30,11 @@ test('homepage and guides fit mobile and desktop without loading analytics', asy
 	page,
 }) => {
 	const analytics: string[] = [];
+	await page.route('https://www.googletagmanager.com/gtm.js**', (route) =>
+		route.fulfill({ contentType: 'application/javascript', body: '' }),
+	);
 	page.on('request', (request) => {
-		if (/google-analytics|googletagmanager/.test(request.url()))
+		if (/google-analytics|googletagmanager\.com\/gtag\//.test(request.url()))
 			analytics.push(request.url());
 	});
 	for (const width of [320, 768, 1440]) {
