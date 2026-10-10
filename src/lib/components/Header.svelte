@@ -49,7 +49,7 @@
 			href="/"
 			aria-label="GoG ePay Services home"
 			onclick={() => closeMenu()}
-			><img src="/assets/portal-logo.svg" width="49" height="49" alt="" /><span
+			><img src="/assets/cagd-logo.png" width="49" height="49" alt="" /><span
 				>GoG <b>ePay Services</b><small>FOR THE PEOPLE WHO SERVE GHANA</small
 				></span
 			></a

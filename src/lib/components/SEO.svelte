@@ -13,7 +13,7 @@
 							'@id': SITE_URL + '/#organization',
 							name: 'Controller and Accountant-General’s Department',
 							url: 'https://cagd.gov.gh/',
-							logo: SITE_URL + '/assets/portal-logo.svg',
+							logo: SITE_URL + '/assets/cagd-logo.png',
 						},
 						...(page.kind === 'home'
 							? [
@@ -101,8 +101,10 @@
 			? 'index,follow,max-image-preview:large'
 			: 'noindex,follow'}
 	/>
-	<meta name="theme-color" content="#85452f" />
-	<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+	<meta name="theme-color" content="#007a3d" />
+	<link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32" />
+	<link rel="icon" href="/assets/favicon-192.png" type="image/png" sizes="192x192" />
+	<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180" />
 	<meta property="og:title" content={page.title} />
 	<meta property="og:description" content={page.description} />
 	<meta

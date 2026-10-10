@@ -40,7 +40,7 @@ await fs.writeFile(
 );
 await fs.writeFile(
 	`${outputDir}/404.html`,
-	'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>Page not found | GoG ePay Services</title></head><body style="font-family:system-ui;color:#392b24;background:#fbf7f2;padding:10vw;line-height:1.7"><main><h1>Page not found</h1><p>This address does not match a public page.</p><p><a href="/">GoG ePay Services home</a> · <a href="/help/">Find help</a></p></main></body></html>',
+	'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>Page not found | GoG ePay Services</title></head><body style="font-family:system-ui;color:#20382b;background:#f7f9f2;padding:10vw;line-height:1.7"><main><h1>Page not found</h1><p>This address does not match a public page.</p><p><a href="/">GoG ePay Services home</a> · <a href="/help/">Find help</a></p></main></body></html>',
 );
 if (vercel) {
 	const configPath = '.vercel/output/config.json';

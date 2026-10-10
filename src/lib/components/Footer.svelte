@@ -7,7 +7,7 @@
 		<div>
 			<a class="brand" href="/"
 				><img
-					src="/assets/portal-logo.svg"
+					src="/assets/cagd-logo.png"
 					width="46"
 					height="46"
 					alt=""

@@ -1,13 +1,13 @@
 :root {
-	--primary: #85452f;
-	--primary-dark: #693321;
-	--deep: #3d2922;
-	--accent: #efc87d;
-	--ink: #392b24;
-	--muted: #715e51;
-	--faint: #776456;
-	--line: #eadfd4;
-	--soft: #fbf7f2;
+	--primary: #007a3d;
+	--primary-dark: #005f30;
+	--deep: #123d2a;
+	--accent: #e8b51b;
+	--ink: #20382b;
+	--muted: #526657;
+	--faint: #5e6c60;
+	--line: #dce5d9;
+	--soft: #f7f9f2;
 }
 * {
 	box-sizing: border-box;
@@ -197,7 +197,7 @@ header {
 	color: var(--deep);
 }
 .button.yellow:hover {
-	background: #e8bd68;
+	background: #d6a312;
 }
 
 /* Hero */
@@ -279,7 +279,7 @@ header {
 	content: '';
 	position: absolute;
 	inset: 55% 0 0;
-	background: linear-gradient(transparent, #3d292298);
+	background: linear-gradient(transparent, #123d2a98);
 	pointer-events: none;
 }
 .photo-caption {
@@ -484,7 +484,7 @@ h3 {
 	min-width: 0;
 	overflow: hidden;
 	border-radius: 14px;
-	background: #201713;
+	background: #10291d;
 }
 .guide-video-player iframe {
 	width: 100%;
@@ -513,12 +513,12 @@ h3 {
 	align-items: center;
 	justify-content: center;
 	gap: 10px;
-	background: #3d292299;
+	background: #123d2a99;
 	color: #fff;
 	font-weight: 600;
 }
 .video-play:hover > span {
-	background: #3d2922c0;
+	background: #123d2ac0;
 }
 .tutorial-heading {
 	font-size: 22px;
@@ -1051,7 +1051,7 @@ footer {
 		background: #fff;
 		border: 1px solid var(--line);
 		border-radius: 16px;
-		box-shadow: 0 16px 36px #3d292214;
+		box-shadow: 0 16px 36px #123d2a14;
 		font-size: 16px;
 		font-weight: 600;
 	}

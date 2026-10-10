@@ -1,0 +1,13 @@
+**/node_modules
+**/bin
+**/obj
+**/.svelte-kit
+**/build
+**/.env*
+.git
+.tools
+TestResults
+**/test-results
+**/playwright-report
+docs/screenshots
+
