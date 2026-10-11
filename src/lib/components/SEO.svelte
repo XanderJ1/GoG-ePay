@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { SITE_URL, INDEXABLE } from '$lib/config';
 	import type { PublicPage } from '$lib/pages';
+	import { answersByPath } from '$lib/answers';
 	let { page }: { page: PublicPage } = $props();
 	const canonical = $derived(SITE_URL ? SITE_URL + page.path : undefined);
 	const schema = $derived(
@@ -51,6 +52,15 @@
 								? { reviewedBy: { '@type': 'Person', name: page.reviewer } }
 								: {}),
 							citation: page.sources.map((source) => source.url),
+							...(answersByPath[page.path]?.length
+								? {
+										mainEntity: answersByPath[page.path].map((item) => ({
+											'@type': 'Question',
+											name: item.question,
+											acceptedAnswer: { '@type': 'Answer', text: item.answer },
+										})),
+									}
+								: {}),
 						},
 						...(page.kind !== 'home'
 							? [
@@ -102,9 +112,23 @@
 			: 'noindex,follow'}
 	/>
 	<meta name="theme-color" content="#007a3d" />
-	<link rel="icon" href="/assets/favicon-192.png" type="image/png" sizes="192x192" />
-	<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16 32x32 48x48" />
-	<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180" />
+	<link
+		rel="icon"
+		href="/assets/favicon-192.png"
+		type="image/png"
+		sizes="192x192"
+	/>
+	<link
+		rel="icon"
+		href="/favicon.ico"
+		type="image/x-icon"
+		sizes="16x16 32x32 48x48"
+	/>
+	<link
+		rel="apple-touch-icon"
+		href="/assets/apple-touch-icon.png"
+		sizes="180x180"
+	/>
 	<meta property="og:title" content={page.title} />
 	<meta property="og:description" content={page.description} />
 	<meta

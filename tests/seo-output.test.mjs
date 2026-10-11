@@ -46,6 +46,14 @@ for (const page of pages) {
 		];
 		assert.equal(blocks.length, 1);
 		const graph = JSON.parse(blocks[0][1])['@graph'];
+		const pageEntity = graph.find((item) => item['@id'].endsWith('#page'));
+		for (const question of pageEntity?.mainEntity || []) {
+			assert.equal(question['@type'], 'Question');
+			assert.equal(question.acceptedAnswer['@type'], 'Answer');
+			const visibleText = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '').replace(/<[^>]*>/g, '');
+			assert.ok(visibleText.includes(question.name), 'Structured question must be visible');
+			assert.ok(visibleText.includes(question.acceptedAnswer.text), 'Structured answer must be visible');
+		}
 		assert.ok(
 			graph.some(
 				(item) => item.url === 'https://www.epayslipgh.com' + page.path,

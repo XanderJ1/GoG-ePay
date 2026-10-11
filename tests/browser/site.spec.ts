@@ -26,10 +26,13 @@ test('mobile navigation and compact registration steps', async ({ page }) => {
 	);
 	expect(overflow).toBe(false);
 });
-test('homepage and guides fit mobile and desktop without loading analytics', async ({
+test('homepage and guides fit mobile and desktop with a single analytics loader', async ({
 	page,
 }) => {
 	const analytics: string[] = [];
+	await page.route('https://www.googletagmanager.com/gtag/**', (route) =>
+		route.fulfill({ contentType: 'application/javascript', body: '' }),
+	);
 	await page.route('https://www.googletagmanager.com/gtm.js**', (route) =>
 		route.fulfill({ contentType: 'application/javascript', body: '' }),
 	);
@@ -41,6 +44,8 @@ test('homepage and guides fit mobile and desktop without loading analytics', asy
 		await page.setViewportSize({ width, height: 900 });
 		for (const path of ['/', '/help/', '/help/register/', '/security/']) {
 			await page.goto(path);
+			expect(await page.locator('script[src*="/gtag/js"]').count()).toBeLessThanOrEqual(1);
+			expect(await page.locator('.analytics-choice').count()).toBe(0);
 			expect(
 				await page.evaluate(
 					() => document.documentElement.scrollWidth > innerWidth,
@@ -48,7 +53,7 @@ test('homepage and guides fit mobile and desktop without loading analytics', asy
 			).toBe(false);
 		}
 	}
-	expect(analytics).toEqual([]);
+	expect(analytics.every((url) => url.includes('/gtag/js?id=G-XLNK77DXEZ'))).toBe(true);
 	await page.goto('/');
 	await page.screenshot({ path: 'previews/seo-home-desktop.png' });
 	await page.setViewportSize({ width: 375, height: 812 });

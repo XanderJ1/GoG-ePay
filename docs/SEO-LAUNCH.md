@@ -70,7 +70,7 @@ Keep authentic links and accurate citations; do not buy links, generate keyword 
 
 ## Optional visitor analytics
 
-The GA4 integration uses the approved measurement ID `G-XLNK77DXEZ` in production builds and does not load until all conditions hold: indexable production build, valid `PUBLIC_ANALYTICS_ID=G-...`, `PUBLIC_ANALYTICS_APPROVED=true`, and visitor consent. Previews never load it. Visitors can decline; `/privacy/` offers a reset control when enabled.
+The GA4 integration uses the approved measurement ID `G-XLNK77DXEZ` in production builds and does not load until all conditions hold: indexable production build, valid `PUBLIC_ANALYTICS_ID=G-...`, `PUBLIC_ANALYTICS_APPROVED=true`. The website analytics integration starts automatically without a prompt; previews disable it.
 
 Before enabling, configure the GA4 web stream: disable enhanced measurement and Google Signals/advertising personalization. This integration sends only explicit `page_view` and `portal_login_click` events with clean public paths and CTA position. Do not add authentication parameters, employee fields or cross-domain account tracking. Do not add analytics to Keycloak or the private payslip application as part of this change. Supply approved retention and controller details in the privacy policy before activation.
 

@@ -7,15 +7,16 @@
 		SITE_URL,
 		PORTAL_URL,
 	} from '$lib/config';
-	let consent = $state(false);
 	let ready = $state(false);
-	let showChoice = $state(false);
+	let lastPath = '';
 	const measurementWindow = () => window as Window & { dataLayer?: unknown[] };
 	function send(..._args: unknown[]) {
 		measurementWindow().dataLayer?.push(arguments);
 	}
 	function view() {
 		if (!ready) return;
+		if (lastPath === window.location.pathname) return;
+		lastPath = window.location.pathname;
 		send('set', {
 			page_location: SITE_URL + window.location.pathname,
 			page_referrer: '',
@@ -48,29 +49,11 @@
 		ready = true;
 		view();
 	}
-	function choose(allow: boolean) {
-		consent = allow;
-		showChoice = false;
-		try {
-			localStorage.setItem('gog-analytics-choice', allow ? 'allow' : 'decline');
-		} catch {
-			/* Choice still applies for this visit. */
-		}
-		if (allow) start();
-	}
 	onMount(() => {
 		if (!ANALYTICS_ENABLED) return;
-		let stored: string | null = null;
-		try {
-			stored = localStorage.getItem('gog-analytics-choice');
-		} catch {
-			/* Ask for this visit when storage is unavailable. */
-		}
-		consent = stored === 'allow';
-		showChoice = stored === null;
-		if (consent) start();
+		start();
 		function trackClick(event: MouseEvent) {
-			if (!ready || !consent || !(event.target instanceof Element)) return;
+			if (!ready || !(event.target instanceof Element)) return;
 			const link = event.target.closest('a');
 			if (link?.href === PORTAL_URL)
 				send('event', 'portal_login_click', {
@@ -82,34 +65,10 @@
 					page_location: SITE_URL + window.location.pathname,
 				});
 		}
-		function reset() {
-			try {
-				localStorage.removeItem('gog-analytics-choice');
-			} catch {
-				/* No stored preference. */
-			}
-			consent = false;
-			window.location.reload();
-		}
 		document.addEventListener('click', trackClick);
-		window.addEventListener('gog-reset-analytics', reset);
 		return () => {
 			document.removeEventListener('click', trackClick);
-			window.removeEventListener('gog-reset-analytics', reset);
 		};
 	});
 	afterNavigate(() => view());
 </script>
-
-{#if ANALYTICS_ENABLED && showChoice}
-	<aside class="analytics-choice" aria-label="Optional analytics">
-		<p>
-			Allow optional website analytics? This helps us improve these guides. <a
-				href="/privacy/">Privacy details</a
-			>
-		</p>
-		<button onclick={() => choose(false)}>Decline</button><button
-			onclick={() => choose(true)}>Allow analytics</button
-		>
-	</aside>
-{/if}

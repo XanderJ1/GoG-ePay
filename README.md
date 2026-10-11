@@ -34,7 +34,7 @@ Eleven public pages cover login, registration, recovery, viewing and understandi
 
 ## Configuration and publication
 
-See [the complete SEO launch guide](docs/SEO-LAUNCH.md) and `.env.example`. Public values are baked into each build. Production builds use GA4 measurement ID `G-XLNK77DXEZ`; analytics loads only after visitor consent. Preview builds disable it, and `PUBLIC_ANALYTICS_APPROVED=false` disables it for production too. This project does not process credentials, migrate the application or administer Keycloak.
+See [the complete SEO launch guide](docs/SEO-LAUNCH.md) and `.env.example`. Public values are baked into each build. Production builds use GA4 measurement ID `G-XLNK77DXEZ`; analytics runs by default on production pages. Preview builds disable it, and `PUBLIC_ANALYTICS_APPROVED=false` disables it for production too. This project does not process credentials, migrate the application or administer Keycloak.
 
 Reviewer identities must only be added after actual review. Application migration, official contact confirmation, DNS/hosting, search account verification and official external links are release dependencies; no production deployment or search submission is performed by local builds.
 
@@ -47,5 +47,5 @@ The employee photograph is illustrative, AI-generated photography. Its responsiv
 Sanity's SEO/AEO best-practices skill informed the implementation; Sanity CMS is not installed.
 
 
-Google Tag Manager container `GTM-N27FCQBP` is included once in the shared HTML head and its noscript iframe immediately after the body opens. Consent defaults to denied; the existing analytics choice grants analytics storage. GA4 `G-XLNK77DXEZ` remains managed by the website integration: do not also configure that measurement ID in GTM, which would duplicate tracking. Preview HTML also contains GTM; restrict published container triggers to the production hostname and respect visitor consent.
+Google Tag Manager container `GTM-N27FCQBP` is included once in the shared HTML head and its noscript iframe immediately after the body opens. Analytics storage is enabled when the production analytics integration starts; advertising storage and personalisation remain denied. GA4 `G-XLNK77DXEZ` remains managed by the website integration: do not also configure that measurement ID in GTM, which would duplicate tracking. Preview HTML also contains GTM; restrict published container triggers to the production hostname and retain the advertising restrictions.
 

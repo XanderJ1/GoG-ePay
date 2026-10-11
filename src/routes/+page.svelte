@@ -4,6 +4,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import { PORTAL_URL, PORTAL_ADDRESS } from '$lib/config';
 	import SEO from '$lib/components/SEO.svelte';
+	import DirectAnswers from '$lib/components/DirectAnswers.svelte';
 	import OfficialDomains from '$lib/components/OfficialDomains.svelte';
 	import { pages, pageFor } from '$lib/pages';
 	import employeeImage from '$lib/assets/employee.webp?format=avif;webp;jpg&w=480;768;1200;1536&enhanced';
@@ -270,6 +271,7 @@
 			</details>
 		</div>
 	</section>
+	<div class="container"><DirectAnswers path="/" /></div>
 	<section class="closing">
 		<div class="container">
 			<p class="eyebrow">READY WHEN YOU ARE</p>

@@ -2,9 +2,10 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import DirectAnswers from '$lib/components/DirectAnswers.svelte';
 	import OfficialDomains from '$lib/components/OfficialDomains.svelte';
 	import AccessGuide from '$lib/components/AccessGuide.svelte';
-	import { PORTAL_URL, ANALYTICS_ENABLED } from '$lib/config';
+	import { PORTAL_URL } from '$lib/config';
 	import { pageFor } from '$lib/pages';
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
@@ -24,6 +25,7 @@
 		<p class="eyebrow">GOVERNMENT OF GHANA · EMPLOYEE PAY SERVICES</p>
 		<h1>{data.page.heading}</h1>
 		<p class="lead">{data.page.summary}</p>
+		<DirectAnswers path={data.page.path} />
 		<p class="revision">
 			{#if data.page.kind === 'guide'}By GoG ePay Services ·
 			{/if}
@@ -44,28 +46,9 @@
 		{#each data.page.sections as section}
 			<section class="article-section">
 				<h2>{section.heading}</h2>
-				{#if data.page.path === '/privacy/' && section.heading === 'Website visits' && ANALYTICS_ENABLED}<p
-					>
-						Optional Google Analytics measures visits to public guides and
-						clicks to the employee application only after you allow it. It
-						records clean public page paths and the location of the login
-						button. It does not record account credentials, authentication
-						links, identity numbers or payslip data. The hosting provider also
-						processes ordinary request information to deliver and secure the
-						website.
-						Google Tag Manager loads when you visit to manage website tags
-						and receives ordinary request information.
-					</p>
-					<p>
-						<button
-							class="button"
-							onclick={() =>
-								window.dispatchEvent(new Event('gog-reset-analytics'))}
-							>Change analytics choice</button
-						>
-					</p>{:else}{#each section.paragraphs as paragraph}<p>
-							{paragraph}
-						</p>{/each}{/if}{#if section.items}<ol>
+				{#each section.paragraphs as paragraph}<p>
+						{paragraph}
+					</p>{/each}{#if section.items}<ol>
 						{#each section.items as item}<li>{item}</li>{/each}
 					</ol>{/if}
 			</section>

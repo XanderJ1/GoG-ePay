@@ -378,7 +378,7 @@ export const pages: PublicPage[] = [
 			{
 				heading: 'Website visits',
 				paragraphs: [
-					'The site has no account form. Google Tag Manager loads when you visit to manage website tags and receives ordinary request information. The website’s Google Analytics integration loads only after you allow analytics. The hosting provider may process ordinary request information, such as IP address and browser details, to deliver and secure the website.',
+					'The site has no account form. Google Tag Manager loads when you visit to manage website tags and receives ordinary request information. Google Analytics runs by default on production pages to measure use of the public website. The hosting provider may process ordinary request information, such as IP address and browser details, to deliver and secure the website.',
 				],
 			},
 			{
@@ -394,9 +394,9 @@ export const pages: PublicPage[] = [
 				],
 			},
 			{
-				heading: 'Search measurement and optional analytics',
+				heading: 'Search measurement and website analytics',
 				paragraphs: [
-					'The operator uses Google Search Console reports to understand search visibility. If you allow optional Google Analytics, it measures public page visits and clicks that open the employee portal. Google Analytics may set cookies and process browser and device information. You can decline analytics and continue using all guides, or change your choice using the control on this page.',
+					'The operator uses Google Search Console reports to understand search visibility. Google Analytics runs by default and measures public page visits and clicks that open the employee portal. Google Analytics may set cookies and process browser and device information. Analytics is limited to this public information website; account actions take place in the separate employee application.',
 					'Analytics events use public page paths without query strings or fragments. Credentials, identity numbers, authentication parameters and payslip contents are not included in these events. Advertising personalisation and Google Signals are disabled in the website tag.',
 				],
 			},
