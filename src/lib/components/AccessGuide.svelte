@@ -222,7 +222,7 @@
 											aria-label="View larger screenshot: {step.title}"
 											><img
 												src="/assets/tutorial/{step.image}"
-												alt={step.alt}
+												alt={step.alt || `${step.title} screen in the employee portal`}
 												width="768"
 												height="432"
 												loading="lazy"

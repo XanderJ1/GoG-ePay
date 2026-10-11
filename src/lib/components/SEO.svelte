@@ -102,8 +102,8 @@
 			: 'noindex,follow'}
 	/>
 	<meta name="theme-color" content="#007a3d" />
-	<link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32" />
 	<link rel="icon" href="/assets/favicon-192.png" type="image/png" sizes="192x192" />
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16 32x32 48x48" />
 	<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180" />
 	<meta property="og:title" content={page.title} />
 	<meta property="og:description" content={page.description} />

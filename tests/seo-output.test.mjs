@@ -59,8 +59,8 @@ for (const page of pages) {
 			);
 		for (const match of html.matchAll(/href="(\/[^"#?]*)(?:[#?][^"]*)?"/g)) {
 			const href = match[1];
-			if (href.startsWith('/_app/') || href.startsWith('/assets/'))
-				await fs.access('build' + href);
+			if (href.startsWith('/_app/') || href.startsWith('/assets/') || href === '/favicon.ico')
+				await fs.access(outputDir + href);
 			else
 				assert.ok(
 					pages.some((item) => item.path === href),

@@ -10,7 +10,7 @@
 					src="/assets/cagd-logo.png"
 					width="46"
 					height="46"
-					alt=""
+					alt="Controller and Accountant-General’s Department logo"
 				/><span>GoG <b>ePay Services</b><small>GOVERNMENT OF GHANA</small></span
 				></a
 			>
