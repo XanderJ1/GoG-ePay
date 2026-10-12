@@ -1,3 +1,15 @@
+export type SourceReference = {
+	title: string;
+	url: string;
+	checkedAt?: string;
+	supportedSections?: string[];
+};
+export type ContentReviewer = {
+	name: string;
+	role: string;
+	reviewedAt: string;
+	profileUrl?: string;
+};
 export type ContentSection = {
 	heading: string;
 	paragraphs: string[];
@@ -12,8 +24,8 @@ export type PublicPage = {
 	updatedAt: string;
 	indexable: boolean;
 	kind: 'home' | 'guide' | 'hub' | 'information';
-	reviewer?: string;
-	sources: { title: string; url: string }[];
+	reviewer?: ContentReviewer;
+	sources: SourceReference[];
 	sections: ContentSection[];
 	related: string[];
 	tutorial?: 'registration' | 'payslip';
@@ -27,7 +39,6 @@ export const videoSource = {
 	url: 'https://www.youtube.com/watch?v=wraUiX0C8wk',
 };
 const base = {
-	updatedAt: '2026-10-09',
 	indexable: true,
 	sources: [rollout],
 	sections: [],
@@ -37,8 +48,9 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/',
+		updatedAt: '2026-10-12',
 		kind: 'home',
-		title: 'GoG ePay Services | Official Ghana E-Payslip Access',
+		title: 'GoG E-Payslip Ghana | Official Access & Help',
 		heading: 'Official Government of Ghana E-Payslip Services',
 		description:
 			'Access the official GoG ePay payslip application. Find Government of Ghana employee registration, sign-in, Ghana Card verification and account help.',
@@ -48,6 +60,7 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/help/',
+		updatedAt: '2026-10-09',
 		kind: 'hub',
 		title: 'GoG E-Payslip Help | Registration & Login Guides',
 		heading: 'Help with your GoG e-payslip',
@@ -68,13 +81,14 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/help/register/',
+		updatedAt: '2026-10-12',
 		kind: 'guide',
-		title: 'Register for Your GoG E-Payslip | Ghana Card & OTP',
+		title: 'GoG E-Payslip Registration | Ghana Card & OTP Guide',
 		heading: 'How to register for your GoG e-payslip',
 		description:
 			'Follow the CAGD registration video: verify your employee number and Ghana Card, confirm your phone with an OTP, and create your payslip account.',
 		summary:
-			'First-time account setup uses your employee number, Ghana Card and a phone number you can access. The CAGD video begins at “Forgot password?” on the sign-in screen.',
+			'To register for your GoG e-payslip, open gogepayservices.com with your employee number, Ghana Card and a phone number you can access. The CAGD video begins at “Forgot password?” on the sign-in screen.',
 		sources: [rollout, videoSource],
 		tutorial: 'registration',
 		sections: [
@@ -95,6 +109,14 @@ export const pages: PublicPage[] = [
 					'Check your employee number and Ghana Card carefully. If verification still fails, ask your employer’s HR or payroll administrator to check the record. Do not use another employee’s details.',
 				],
 			},
+			{
+				heading:
+					'What if my phone number is unavailable or an OTP does not arrive?',
+				paragraphs: [
+					'Check the number shown in the application before requesting a code. Follow its retry instructions if offered. Enter the code only in the application; never send it to someone offering to register for you.',
+					'If the recorded number is incorrect or you no longer have access to it, ask your employer’s HR or payroll administrator for the approved correction process. This information website cannot update your employee record or issue a code.',
+				],
+			},
 		],
 		related: [
 			'/help/sign-in/',
@@ -106,13 +128,14 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/help/sign-in/',
+		updatedAt: '2026-10-12',
 		kind: 'guide',
-		title: 'GoG E-Payslip Login Help | Official Employee Access',
-		heading: 'How to sign in to your GoG e-payslip',
+		title: 'GoG E-Payslip Login in Ghana | Sign-in Help',
+		heading: 'How to log in to your GoG e-payslip',
 		description:
 			'Open the official employee application, sign in with your Staff Number and password, and get help if you cannot access your Government of Ghana payslip.',
 		summary:
-			'Select “Log in to portal” to open the employee application. Enter your Staff Number and password on its sign-in screen, then follow any verification requested.',
+			'To log in to your GoG e-payslip, open gogepayservices.com with your Staff Number and password ready. Enter these details on the employee application’s sign-in screen and follow any verification requested.',
 		tutorial: 'payslip',
 		sources: [rollout, videoSource],
 		sections: [
@@ -139,8 +162,9 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/help/reset-password/',
+		updatedAt: '2026-10-12',
 		kind: 'guide',
-		title: 'Forgot Your GoG E-Payslip Password? | Recovery Help',
+		title: 'Reset Your GoG E-Payslip Password | Recovery Help',
 		heading: 'Recover access to your GoG e-payslip account',
 		description:
 			'Use the official application’s Forgot password option to recover GoG e-payslip access. Learn what to check and where to get help safely.',
@@ -171,15 +195,22 @@ export const pages: PublicPage[] = [
 					'No. The published CAGD first-time registration video also starts at “Forgot password?”. New employees should use the registration guide; returning employees should follow the recovery process presented for their existing account.',
 				],
 			},
+			{
+				heading: 'What if my employee or Ghana Card details are incorrect?',
+				paragraphs: [
+					'Check the information you entered against your own employee and Ghana Card records. If the application still reports a mismatch or an employee field is locked, ask HR or payroll to check the record through the approved process. Do not create another account using someone else’s details.',
+				],
+			},
 		],
 		related: ['/help/register/', '/help/sign-in/', '/contact/', '/security/'],
 	},
 	{
 		...base,
 		path: '/help/view-payslip/',
+		updatedAt: '2026-10-12',
 		kind: 'guide',
-		title: 'View Your Government of Ghana Payslip | GoG ePay',
-		heading: 'How to view your Government of Ghana payslip',
+		title: 'Check Your GoG E-Payslip Online | Viewing Guide',
+		heading: 'How to check your GoG e-payslip online',
 		description:
 			'Sign in to the GoG ePay employee application, choose the payslip area, check the pay period and review earnings, deductions and net pay.',
 		summary:
@@ -200,7 +231,7 @@ export const pages: PublicPage[] = [
 			{
 				heading: 'Can I download or print my payslip?',
 				paragraphs: [
-					'Use a download or print option only if it is available in your application. Exact controls have not been documented here because verified dashboard screenshots were not supplied. Keep any saved file private and remove it from shared devices after use.',
+					'Use a download or print option only if it is available in your application. Available controls depend on your account and the current application. Keep any saved file private and remove it from shared devices after use.',
 				],
 			},
 			{
@@ -220,6 +251,7 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/help/understand-payslip/',
+		updatedAt: '2026-10-09',
 		kind: 'guide',
 		title: 'Understand Your Payslip | Gross Pay, Deductions & Net',
 		heading: 'Understand the figures on your payslip',
@@ -258,6 +290,7 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/security/',
+		updatedAt: '2026-10-09',
 		kind: 'information',
 		title: 'Official GoG E-Payslip Addresses & Account Safety',
 		heading: 'Recognize the official service and protect your account',
@@ -296,13 +329,14 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/about/',
+		updatedAt: '2026-10-12',
 		kind: 'information',
 		title: 'About GoG ePay Services | Official Payslip Information',
 		heading: 'About GoG ePay Services',
 		description:
 			'Understand the role of the official GoG ePay information website, its employee application and CAGD’s published registration resources.',
 		summary:
-			'This website helps Government of Ghana employees find the official payslip application and understand how to access it.',
+			'GoG ePay Services is the officially authorised public information website helping Government of Ghana employees find the employee application and understand how to access it.',
 		sections: [
 			{
 				heading: 'What is the service for?',
@@ -313,7 +347,7 @@ export const pages: PublicPage[] = [
 			{
 				heading: 'Where do the guides come from?',
 				paragraphs: [
-					'Registration guidance follows the CAGD announcement, instructional video and supplied redacted screenshots. General payslip guidance explains common terms and directs individual payroll questions to the employer. Sources are linked on each relevant page.',
+					'Registration guidance follows the CAGD announcement, instructional video and supplied redacted screenshots. General payslip guidance explains common terms and directs individual payroll questions to the employer. Sources are linked on each relevant page. CAGD is cited as the service authority; publisher and reviewer details on this information website describe its own guidance and do not imply that every page has been reviewed by CAGD.',
 				],
 			},
 			{
@@ -328,6 +362,7 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/contact/',
+		updatedAt: '2026-10-09',
 		kind: 'information',
 		title: 'GoG E-Payslip Support | Verified Contact Routes',
 		heading: 'Get help through the right support channel',
@@ -367,6 +402,7 @@ export const pages: PublicPage[] = [
 	{
 		...base,
 		path: '/privacy/',
+		updatedAt: '2026-10-09',
 		kind: 'information',
 		title: 'Privacy | GoG ePay Information Website',
 		heading: 'Privacy on this information website',

@@ -19,11 +19,12 @@
 			<p class="eyebrow">WELCOME TO GOG EPAY SERVICES</p>
 			<h1>Official Government of Ghana <em>E-Payslip Services</em></h1>
 			<p class="intro">
-				No queues, no chasing anyone down. Sign in to the portal and see your
-				electronic payslip in a few quiet minutes.
+				Access the official GoG ePay application to check your Government of
+				Ghana e-payslip online. Find registration, login and password recovery
+				help.
 			</p>
 			<div class="actions">
-				<a class="button" href={PORTAL_URL}>Go to my payslip</a><a
+				<a class="button" href={PORTAL_URL}>Log in to GoG ePay</a><a
 					class="text-link"
 					href="#guide">First time? We’ll walk you through it</a
 				>
@@ -104,6 +105,11 @@
 		</div>
 		<p><a href="/help/">See all help & guides</a></p>
 		<OfficialDomains />
+		<p>
+			Official service announcement: {#each pages[0].sources as source}<a
+					href={source.url}>{source.title}</a
+				>{/each}
+		</p>
 	</section>
 	<section class="section container understand" id="understand">
 		<div>

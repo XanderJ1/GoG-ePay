@@ -11,10 +11,16 @@
 	>
 		<h2 id="direct-answers-heading">Quick answers</h2>
 		{#each answers as item}
-			<article>
+			<article id={item.id}>
 				<h3>{item.question}</h3>
 				<p>{item.answer}</p>
-				<a href={item.guide}>Read the related guide</a>
+				<a href={item.guide}>{item.linkLabel}</a>
+				{#if item.sources?.length}<p>
+						Sources: {#each item.sources as source}<a href={source.url}
+								>{source.title}</a
+							>
+						{/each}
+					</p>{/if}
 			</article>
 		{/each}
 	</section>

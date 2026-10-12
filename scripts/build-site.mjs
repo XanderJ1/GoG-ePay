@@ -1,5 +1,8 @@
+import { loadContent, validateContent } from './content-validation.mjs';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs/promises';
+const content = await loadContent();
+validateContent(content.pages, content.answers);
 const vercel = Boolean(process.env.VERCEL);
 const outputDir = vercel ? '.vercel/output/static' : 'build';
 const production =

@@ -40,12 +40,27 @@ test('homepage and guides fit mobile and desktop with a single analytics loader'
 		if (/google-analytics|googletagmanager\.com\/gtag\//.test(request.url()))
 			analytics.push(request.url());
 	});
-	for (const width of [320, 768, 1440]) {
+	for (const width of [320, 390, 768, 1440]) {
 		await page.setViewportSize({ width, height: 900 });
-		for (const path of ['/', '/help/', '/help/register/', '/security/']) {
+		for (const path of [
+			'/',
+			'/help/',
+			'/help/register/',
+			'/help/sign-in/',
+			'/help/reset-password/',
+			'/help/view-payslip/',
+			'/help/understand-payslip/',
+			'/security/',
+			'/about/',
+			'/contact/',
+			'/privacy/',
+		]) {
 			await page.goto(path);
-			expect(await page.locator('script[src*="/gtag/js"]').count()).toBeLessThanOrEqual(1);
+			expect(
+				await page.locator('script[src*="/gtag/js"]').count(),
+			).toBeLessThanOrEqual(1);
 			expect(await page.locator('.analytics-choice').count()).toBe(0);
+			expect(await page.locator('img:not([alt])').count()).toBe(0);
 			expect(
 				await page.evaluate(
 					() => document.documentElement.scrollWidth > innerWidth,
@@ -53,13 +68,15 @@ test('homepage and guides fit mobile and desktop with a single analytics loader'
 			).toBe(false);
 		}
 	}
-	expect(analytics.every((url) => url.includes('/gtag/js?id=G-XLNK77DXEZ'))).toBe(true);
+	expect(
+		analytics.every((url) => url.includes('/gtag/js?id=G-XLNK77DXEZ')),
+	).toBe(true);
 	await page.goto('/');
-	await page.screenshot({ path: 'previews/seo-home-desktop.png' });
+	await page.screenshot({ path: 'reports/seo-home-desktop.png' });
 	await page.setViewportSize({ width: 375, height: 812 });
 	await page.goto('/help/register/');
 	await page.locator('.mobile-step-picker').scrollIntoViewIfNeeded();
-	await page.screenshot({ path: 'previews/seo-registration-mobile.png' });
+	await page.screenshot({ path: 'reports/seo-registration-mobile.png' });
 });
 test('guide navigation updates metadata and desktop keyboard tabs', async ({
 	page,
@@ -67,14 +84,12 @@ test('guide navigation updates metadata and desktop keyboard tabs', async ({
 	await page.goto('/help/');
 	await page
 		.getByRole('heading', {
-			name: 'How to sign in to your GoG e-payslip',
+			name: 'How to log in to your GoG e-payslip',
 			exact: true,
 		})
 		.click();
 	await expect(page).toHaveURL(/\/help\/sign-in\/$/);
-	await expect(page).toHaveTitle(
-		'GoG E-Payslip Login Help | Official Employee Access',
-	);
+	await expect(page).toHaveTitle('GoG E-Payslip Login in Ghana | Sign-in Help');
 	await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
 		'href',
 		'https://www.epayslipgh.com/help/sign-in/',
@@ -103,6 +118,70 @@ test('instructions survive without JavaScript and missing routes return 404', as
 			exact: true,
 		}),
 	).toBeVisible();
+	for (const path of [
+		'/',
+		'/help/',
+		'/help/sign-in/',
+		'/help/reset-password/',
+		'/help/view-payslip/',
+		'/help/understand-payslip/',
+		'/security/',
+		'/about/',
+		'/contact/',
+		'/privacy/',
+	]) {
+		await page.goto('http://127.0.0.1:4173' + path);
+		await expect(page.locator('h1')).toBeVisible();
+		for (const source of await page.locator('.sources a').all())
+			await expect(source).toBeVisible();
+	}
 	await context.close();
 	expect((await request.get('/nonexistent/')).status()).toBe(404);
+});
+
+test('analytics records one sanitized view per navigation and a portal click', async ({
+	page,
+}) => {
+	await page.route('https://www.googletagmanager.com/**', (route) =>
+		route.fulfill({ contentType: 'application/javascript', body: '' }),
+	);
+	await page.goto('/?employee=private#secret');
+	await expect(page.locator('script[src*="/gtag/js"]')).toHaveCount(1);
+	await expect(page.locator('script[src*="/gtm.js"]')).toHaveCount(1);
+	const events = () =>
+		page.evaluate(() =>
+			Array.from(
+				(window as Window & { dataLayer?: ArrayLike<unknown>[] }).dataLayer ||
+					[],
+			).map((item) => Array.from(item)),
+		);
+	expect(
+		(await events()).filter(
+			(item) => item[0] === 'event' && item[1] === 'page_view',
+		),
+	).toHaveLength(1);
+	await page.locator('footer a[href="/help/"]').first().click();
+	await expect(page).toHaveURL(/\/help\/$/);
+	await expect
+		.poll(
+			async () =>
+				(await events()).filter(
+					(item) => item[0] === 'event' && item[1] === 'page_view',
+				).length,
+		)
+		.toBe(2);
+	await page
+		.locator('a[href="https://gogepayservices.com/"]')
+		.first()
+		.evaluate((element) => {
+			element.addEventListener('click', (event) => event.preventDefault());
+			(element as HTMLElement).click();
+		});
+	const recorded = await events();
+	expect(
+		recorded.filter(
+			(item) => item[0] === 'event' && item[1] === 'portal_login_click',
+		),
+	).toHaveLength(1);
+	expect(JSON.stringify(recorded)).not.toMatch(/employee=|private|secret/);
 });

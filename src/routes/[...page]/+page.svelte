@@ -38,7 +38,14 @@
 					day: 'numeric',
 				})}</time
 			>{#if data.page.reviewer}
-				· Reviewed by {data.page.reviewer}{/if}
+				· Reviewed by
+				{#if data.page.reviewer.profileUrl}<a
+						href={data.page.reviewer.profileUrl}>{data.page.reviewer.name}</a
+					>{:else}{data.page.reviewer.name}{/if},
+				{data.page.reviewer.role} on
+				<time datetime={data.page.reviewer.reviewedAt}
+					>{data.page.reviewer.reviewedAt}</time
+				>{/if}
 		</p>
 		{#if data.page.kind === 'guide'}<a class="button" href={PORTAL_URL}
 				>Log in to portal</a
@@ -60,6 +67,13 @@
 				<ul>
 					{#each data.page.sources as source}<li>
 							<a href={source.url}>{source.title}</a>
+							{#if source.checkedAt}
+								· Checked <time datetime={source.checkedAt}
+									>{source.checkedAt}</time
+								>{/if}
+							{#if source.supportedSections?.length}<p>
+									Supports: {source.supportedSections.join('; ')}.
+								</p>{/if}
 						</li>{/each}
 				</ul>
 			</section>{/if}

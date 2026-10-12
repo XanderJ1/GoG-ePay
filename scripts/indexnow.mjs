@@ -1,5 +1,5 @@
 // Invoke only after the matching production build is successfully deployed.
-import fs from 'node:fs/promises';
+import { readOutputSitemap, validateSubmission } from './output-sitemap.mjs';
 const key = process.env.INDEXNOW_KEY;
 const origin = 'https://www.epayslipgh.com';
 const paths = process.argv.slice(2);
@@ -8,23 +8,8 @@ if (!key || !/^[a-zA-Z0-9-]{8,128}$/.test(key) || !paths.length) {
 		'Set INDEXNOW_KEY and pass changed public paths, for example /help/register/. Deploy the key verification file first.',
 	);
 }
-const sitemap = await fs.readFile('build/sitemap.xml', 'utf8');
-if (!sitemap.includes(origin))
-	throw new Error('IndexNow requires the deployed indexable production build.');
-const urlList = paths.map((value) => {
-	const url = new URL(value, origin);
-	if (
-		url.origin !== origin ||
-		url.search ||
-		url.hash ||
-		!value.startsWith('/') ||
-		value.startsWith('//')
-	)
-		throw new Error(
-			'Only canonical public paths on the official site may be submitted.',
-		);
-	return url.href;
-});
+const { urls } = await readOutputSitemap();
+const urlList = validateSubmission(paths, urls, origin);
 const response = await fetch('https://api.indexnow.org/indexnow', {
 	method: 'POST',
 	headers: { 'Content-Type': 'application/json' },

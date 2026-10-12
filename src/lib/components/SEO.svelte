@@ -10,24 +10,22 @@
 					'@context': 'https://schema.org',
 					'@graph': [
 						{
-							'@type': 'GovernmentOrganization',
+							'@type': 'Organization',
 							'@id': SITE_URL + '/#organization',
-							name: 'Controller and Accountant-General’s Department',
-							url: 'https://cagd.gov.gh/',
+							name: 'GoG ePay Services',
+							url: SITE_URL + '/about/',
 							logo: SITE_URL + '/assets/cagd-logo.png',
 						},
-						...(page.kind === 'home'
-							? [
-									{
-										'@type': 'WebSite',
-										'@id': SITE_URL + '/#website',
-										name: 'GoG ePay Services',
-										alternateName: 'GoG E-Payslip',
-										url: SITE_URL + '/',
-										publisher: { '@id': SITE_URL + '/#organization' },
-									},
-								]
-							: []),
+
+						{
+							'@type': 'WebSite',
+							'@id': SITE_URL + '/#website',
+							name: 'GoG ePay Services',
+							alternateName: 'GoG E-Payslip',
+							url: SITE_URL + '/',
+							publisher: { '@id': SITE_URL + '/#organization' },
+						},
+
 						{
 							'@type': page.kind === 'guide' ? 'Article' : 'WebPage',
 							'@id': canonical + '#page',
@@ -35,28 +33,42 @@
 							name: page.heading,
 							headline: page.heading,
 							description: page.description,
-							inLanguage: 'en',
+							inLanguage: 'en-GH',
+							isPartOf: { '@id': SITE_URL + '/#website' },
+							...(page.kind !== 'home'
+								? { breadcrumb: { '@id': canonical + '#breadcrumbs' } }
+								: {}),
 							dateModified: page.updatedAt,
 							publisher: { '@id': SITE_URL + '/#organization' },
 							...(page.kind === 'guide'
 								? {
-										author: {
-											'@type': 'Organization',
-											name: 'GoG ePay Services',
-											url: SITE_URL + '/about/',
-										},
+										author: { '@id': SITE_URL + '/#organization' },
 										image: SITE_URL + '/assets/social-card.png',
 									}
 								: {}),
 							...(page.reviewer
-								? { reviewedBy: { '@type': 'Person', name: page.reviewer } }
+								? {
+										reviewedBy: {
+											'@type': 'Person',
+											name: page.reviewer.name,
+											jobTitle: page.reviewer.role,
+											...(page.reviewer.profileUrl
+												? { url: page.reviewer.profileUrl }
+												: {}),
+										},
+										lastReviewed: page.reviewer.reviewedAt,
+									}
 								: {}),
 							citation: page.sources.map((source) => source.url),
 							...(answersByPath[page.path]?.length
 								? {
 										mainEntity: answersByPath[page.path].map((item) => ({
 											'@type': 'Question',
+											'@id': canonical + '#' + item.id,
 											name: item.question,
+											...(item.sources?.length
+												? { citation: item.sources.map((source) => source.url) }
+												: {}),
 											acceptedAnswer: { '@type': 'Answer', text: item.answer },
 										})),
 									}
@@ -66,6 +78,7 @@
 							? [
 									{
 										'@type': 'BreadcrumbList',
+										'@id': canonical + '#breadcrumbs',
 										itemListElement: [
 											{
 												'@type': 'ListItem',

@@ -1,3 +1,5 @@
+See [the competitive release checklist](SEO-COMPETITIVE-RELEASE.md) for the latest controls, account dependencies and measurement procedure.
+
 # GoG ePay SEO launch and operating guide
 
 ## What is implemented
@@ -23,17 +25,17 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-`build:preview` writes noindex meta tags, noindex response headers and an empty sitemap. `build:production` enables indexing, requires a valid public origin and emits the complete sitemap. Both generate hosting headers, domain redirects and a genuine 404 page. The output is `build/`; no Node runtime is required.
+`build:preview` writes noindex meta tags, noindex response headers and an empty sitemap. `build:production` enables indexing, requires a valid public origin and emits the complete sitemap. Both generate hosting headers, domain redirects and a genuine 404 page. The output is `build/` locally or `.vercel/output/static` on Vercel; no Node runtime is required.
 
 The build commands default to the confirmed domain roles. Explicit environment values override them. Configuration is baked into the output: rebuild after changes. `.env.example` documents all settings. Ordinary `npm run build` now generates the complete indexable production package. Use `npm run build:preview` explicitly for non-indexable preview deployments. For the development server, set the confirmed URLs and `PUBLIC_INDEXING=true` in your local `.env` to inspect the populated sitemap; restart the server after changing environment values.
 
 ## Production release dependencies
 
 1. Confirm ownership and TLS for www.epayslipgh.com. Keep the existing application at gogepayservices.com and preserve its working Keycloak callback configuration. Test registration, returning login, recovery and logout using an authorized test account. The application source and Keycloak administration are outside this repository.
-2. Have the authorized CAGD reviewer verify every guide, domain and linked support route. Supply the actual reviewer name; set `reviewer` on each reviewed registry entry only after approval. Revision dates currently record this content implementation, not government review. Check supplied screenshot redaction and whether old images match the migrated application.
-3. Verify official organizational wording and the CAGD identity in structured data. Current evidence: CAGD's published upgraded payslip announcement names gogepayservices.com and links the supplied tutorial. Never invent staff profiles, ratings, endorsements or review credentials.
+2. Have the authorized CAGD reviewer verify every guide, domain and linked support route. Supply the approved reviewer name, role and actual review date; set the reviewer object on each reviewed registry entry only after approval. Revision dates currently record this content implementation, not government review. Check supplied screenshot redaction and whether old images match the migrated application.
+3. Verify official organizational wording and the approved operator identity in structured data. CAGD is cited as the service authority; GoG ePay Services currently identifies the information website publisher. Current evidence: CAGD's published upgraded payslip announcement names gogepayservices.com and links the supplied tutorial. Never invent staff profiles, ratings, endorsements or review credentials.
 4. Verify the current CAGD contact page. The public guides link that page rather than copying potentially outdated telephone numbers.
-5. Review the privacy wording against the actual host's processing and retention. Keep analytics disabled until the applicable privacy requirements and account settings are approved.
+5. Review the privacy wording against the actual host's processing and retention. Production analytics remain enabled by default as requested; verify the applicable privacy wording and account settings.
 
 ## Cloudflare Pages deployment
 
@@ -82,7 +84,7 @@ This project includes a post-deployment submission helper, not an automatically 
 npm run indexnow -- /help/register/ /help/sign-in/
 ```
 
-Pass only added, substantively updated or removed canonical public paths. Retry failures in the deployment workflow without re-deploying the site. Do not submit on every visitor request. No submission was made during local implementation. IndexNow supports participating engines such as Bing; it is not a Google submission mechanism.
+Pass only added or substantively updated canonical public paths present in the generated sitemap. The helper rejects removed or unknown paths. Retry failures in the deployment workflow without re-deploying the site. Do not submit on every visitor request. No submission was made during local implementation. IndexNow supports participating engines such as Bing; it is not a Google submission mechanism.
 
 ## Weekly review, then monthly
 

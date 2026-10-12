@@ -29,6 +29,17 @@ for (const page of pages) {
 		);
 		assert.equal((html.match(/name="description"/g) || []).length, 1);
 		assert.equal((html.match(/rel="canonical"/g) || []).length, 1);
+		assert.equal(
+			(html.match(/googletagmanager\.com\/gtm\.js/g) || []).length,
+			production ? 1 : 0,
+		);
+		assert.equal(
+			(html.match(/googletagmanager\.com\/ns\.html/g) || []).length,
+			production ? 1 : 0,
+		);
+		assert.ok(
+			!html.includes('site-tag-head') && !html.includes('site-tag-body'),
+		);
 		assert.ok(html.includes(`href="https://www.epayslipgh.com${page.path}"`));
 		assert.equal(seenTitles.has(page.title), false);
 		seenTitles.add(page.title);
@@ -47,12 +58,33 @@ for (const page of pages) {
 		assert.equal(blocks.length, 1);
 		const graph = JSON.parse(blocks[0][1])['@graph'];
 		const pageEntity = graph.find((item) => item['@id'].endsWith('#page'));
+		assert.ok(
+			graph.some(
+				(item) => item['@id'] === 'https://www.epayslipgh.com/#website',
+			),
+		);
+		assert.equal(
+			pageEntity.isPartOf['@id'],
+			'https://www.epayslipgh.com/#website',
+		);
+		assert.equal(pageEntity.dateModified, page.updatedAt);
+		for (const citation of pageEntity.citation)
+			assert.ok(html.includes(`href="${citation}"`));
 		for (const question of pageEntity?.mainEntity || []) {
+			assert.ok(html.includes(`id="${question['@id'].split('#')[1]}"`));
 			assert.equal(question['@type'], 'Question');
 			assert.equal(question.acceptedAnswer['@type'], 'Answer');
-			const visibleText = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '').replace(/<[^>]*>/g, '');
-			assert.ok(visibleText.includes(question.name), 'Structured question must be visible');
-			assert.ok(visibleText.includes(question.acceptedAnswer.text), 'Structured answer must be visible');
+			const visibleText = html
+				.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '')
+				.replace(/<[^>]*>/g, '');
+			assert.ok(
+				visibleText.includes(question.name),
+				'Structured question must be visible',
+			);
+			assert.ok(
+				visibleText.includes(question.acceptedAnswer.text),
+				'Structured answer must be visible',
+			);
 		}
 		assert.ok(
 			graph.some(
@@ -67,7 +99,11 @@ for (const page of pages) {
 			);
 		for (const match of html.matchAll(/href="(\/[^"#?]*)(?:[#?][^"]*)?"/g)) {
 			const href = match[1];
-			if (href.startsWith('/_app/') || href.startsWith('/assets/') || href === '/favicon.ico')
+			if (
+				href.startsWith('/_app/') ||
+				href.startsWith('/assets/') ||
+				href === '/favicon.ico'
+			)
 				await fs.access(outputDir + href);
 			else
 				assert.ok(
