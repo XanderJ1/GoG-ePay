@@ -33,6 +33,38 @@ export const answersByPath: Record<string, Answer[]> = {
 			guide: '/help/register/',
 			linkLabel: 'GoG e-payslip registration guide',
 		},
+		{
+			id: 'forgotten-payslip-password',
+			question: 'How do I reset my GoG e-payslip password?',
+			answer:
+				'For an existing account, open gogepayservices.com and select “Forgot password?” on its sign-in page. Follow the recovery instructions shown. If your recorded phone number is incorrect or unavailable, ask your employer’s HR or payroll administrator for the approved next step.',
+			guide: '/help/reset-password/',
+			linkLabel: 'GoG e-payslip password recovery',
+		},
+		{
+			id: 'missing-or-incorrect-payslip',
+			question: 'What if my GoG payslip is missing or an amount looks wrong?',
+			answer:
+				'Check that you selected the correct pay period. If the payslip is still missing or an amount needs explaining, contact your employer’s payroll administrator with the period and the item you want clarified. Keep passwords and verification codes private.',
+			guide: '/contact/',
+			linkLabel: 'Payslip support and contact routes',
+		},
+		{
+			id: 'shared-computer-payslip',
+			question: 'Can I check my e-payslip on a shared computer?',
+			answer:
+				'Use care on a shared computer: do not save your password, sign out of the employee application when finished and remove any downloaded payslip before leaving. Keep your account and identity details private.',
+			guide: '/security/',
+			linkLabel: 'Protect your payslip account',
+		},
+		{
+			id: 'check-payslip-link',
+			question: 'How do I check whether a payslip login link is safe?',
+			answer:
+				'Start at www.epayslipgh.com and use its login button to open gogepayservices.com. Check the full hostname before entering account details; authentication uses auth.gogepayadmin.com. A familiar logo alone does not prove a link is official. Never share your password or verification code.',
+			guide: '/security/',
+			linkLabel: 'Official addresses and account safety',
+		},
 	],
 	'/help/': [
 		{

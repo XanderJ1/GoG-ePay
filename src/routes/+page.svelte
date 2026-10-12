@@ -208,8 +208,11 @@
 	<section class="section container help" id="help">
 		<div class="help-intro">
 			<p class="eyebrow">QUESTIONS ARE WELCOME</p>
-			<h2>Let’s sort it<br />out together.</h2>
-			<p>Short, honest answers to what people ask us most.</p>
+			<h2>GoG e-payslip questions<br />and answers.</h2>
+			<p>
+				Find help with login, registration, password recovery and checking your
+				payslip.
+			</p>
 			<div class="support-note">
 				<h3>Is something wrong with your pay?</h3>
 				<p>
@@ -220,64 +223,8 @@
 				<p>It helps to have the pay period and a short note of the problem.</p>
 			</div>
 		</div>
-		<div class="faq-list">
-			<details open>
-				<summary>Where can I see my payslip?</summary>
-				<p>
-					Use any login button on this page to reach <a href={PORTAL_URL}
-						>{PORTAL_ADDRESS}</a
-					>. Sign in to your employee account and follow the payslip options
-					there.
-				</p>
-			</details>
-			<details>
-				<summary>Can I sign in on this page?</summary>
-				<p>
-					No. This page is only a guide. You’ll enter your login details on the
-					portal itself, after you select “Log in to portal”.
-				</p>
-			</details>
-			<details>
-				<summary>I forgot my password. What now?</summary>
-				<p>
-					Select “Forgot password?” on the portal’s sign-in page. If you still
-					can’t get back in, ask your payroll administrator what to do next.
-				</p>
-			</details>
-			<details>
-				<summary>I’m new. How do I get access?</summary>
-				<p>
-					Follow the <a href="/help/register/">registration tutorial</a>. You’ll
-					verify your employee number and Ghana Card, confirm your phone number
-					and set up your password. If any greyed-out profile details are wrong,
-					ask your HR department to correct them.
-				</p>
-			</details>
-			<details>
-				<summary>My payslip is missing, or something looks off.</summary>
-				<p>
-					First, double-check the pay period. If it still looks wrong, contact
-					your payroll administrator and tell them the period and exactly what
-					you’d like clarified.
-				</p>
-			</details>
-			<details>
-				<summary>Is it okay to use a shared computer?</summary>
-				<p>
-					Yes, with care. Don’t save your password, sign out when you’re done,
-					and delete any payslip you downloaded before you leave.
-				</p>
-			</details>
-			<details>
-				<summary>Someone sent me a payslip link. Should I click it?</summary>
-				<p>
-					Better not to. Type {PORTAL_ADDRESS} into your browser yourself instead.
-					And never send your password or verification code to anyone.
-				</p>
-			</details>
-		</div>
+		<div class="faq-list"><DirectAnswers path="/" /></div>
 	</section>
-	<div class="container"><DirectAnswers path="/" /></div>
 	<section class="closing">
 		<div class="container">
 			<p class="eyebrow">READY WHEN YOU ARE</p>
