@@ -1,51 +1,62 @@
 # GoG ePay Services
 
-Official public information website for Government of Ghana employee payslip access, built with Svelte 5, SvelteKit 2 and TypeScript. The searchable website is **www.epayslipgh.com**; login links open the separate application at **gogepayservices.com**.
+Public information website for Government of Ghana employee payslip access, written in **plain HTML, CSS and vanilla JavaScript**. There is no Svelte, TypeScript, Vite, client router or framework runtime.
 
-## Development and verification
+The public website is https://www.epayslipgh.com/. Login opens the separate employee application at https://gogepayservices.com/.
 
-Use Node.js 22.12 or newer.
+## Edit the website
+
+- `site/index.html`: homepage.
+- `site/help/*/index.html`: registration, sign-in, recovery and payslip guides.
+- `site/about/index.html`, `site/contact/index.html`, `site/privacy/index.html`, `site/security/index.html`: information pages.
+- `site/assets/site.css`: complete styling, green/gold palette and responsive layouts.
+- `site/assets/site.js`: mobile navigation, accessible tutorial steps, click-to-load video and production analytics.
+- `site/assets/`: CAGD favicon/logo, PNG icons, screenshots and responsive image variants.
+- `site/pages.json`: the eleven public URL paths used for packaging and sitemap generation.
+
+All eleven pages contain complete content, metadata and JSON-LD in their HTML. Edit visible answers and their JSON-LD together; the tests reject inconsistent wording. Update a page's visible revision date and JSON-LD `dateModified` only after substantive changes. Keep canonical URLs and internal links on the trailing-slash paths.
+
+Deployment uses `site/assets/`. The original employee photograph is retained as `site/assets/employee-original.webp` for future image updates. No build-time image processing is required. The optional icon/favicon maintenance scripts use Sharp and Bootstrap's source icons, which are development tools only.
+
+## Run and verify
+
+Use Node.js 22.12+ for development/packaging; Node is not needed on the hosting server.
 
 ```powershell
 npm ci
 npm run dev
+```
+
+Development serves a noindex preview at http://127.0.0.1:5173 and rebuilds HTML when files inside `site/` change. Refresh the browser after an edit. Set `PORT` if that port is occupied.
+
+```powershell
 npm run check
 npm test
+npm run test:release
 npm run build:preview
+npm run test:seo
+npm run build
 npm run test:seo
 npx playwright install chromium
 npm run test:browser
 ```
 
-For a production package use `npm run build` (or `npm run build:production`), then rerun `npm run test:seo` and `npm run test:browser`. Local and Cloudflare builds write to `build/`; Vercel builds use `.vercel/output/static` and preserve SvelteKit's generated routing configuration. Preview builds are non-indexable, including Vercel preview deployments. No Node runtime is needed for hosting.
+`npm run build` copies HTML/CSS/JS/images into `build/`, applies production configuration, creates robots.txt/sitemap.xml, redirect rules, response headers and a real 404 page. It performs no compilation or bundling. `npm run preview` serves that output at http://127.0.0.1:4173. Stop another server on 4173 before browser tests.
 
-On Vercel, keep the build command as `npm run build` and leave the output-directory override unset so Vercel uses its generated Build Output API configuration. Set `www.epayslipgh.com` as the production domain and configure `epayslipgh.com` to redirect to it in Vercel's domain settings. After deploying, check `/sitemap.xml` for all eleven public URLs. To check a Vercel build locally, set `SEO_OUTPUT_DIR=.vercel/output/static` when running `npm run test:seo`.
+## Hosting
 
-## Structure
+Upload the **contents of `build/`** to any static host. Use HTTPS and redirect non-www traffic to www. Canonical directory URLs must end with `/`; missing pages and files must return 404 rather than the homepage. Cloudflare Pages can use build command `npm run build` and output directory `build`.
 
-- `src/lib/pages.ts`: typed public content, source references, metadata and related links.
-- `src/lib/components/SEO.svelte`: canonical URLs, social metadata and structured data.
-- `src/routes/[...page]/`: prerendered guide and information pages.
-- `src/lib/tutorial.ts`: shared registration and returning-user instructions.
-- `src/lib/components/AccessGuide.svelte`: accessible desktop tabs, compact mobile selector and video.
-- `scripts/`: deployment packaging, local output server and post-deployment IndexNow submission.
+Vercel builds write `.vercel/output/static` plus a Build Output API routing configuration. Set its framework preset to **Other**, keep build command `npm run build`, and leave the output-directory override unset. Keep the existing custom domains. Vercel preview deployments stay noindex and omit tracking. To validate Vercel output, set `SEO_OUTPUT_DIR=.vercel/output/static` before `npm run test:seo`.
 
-Eleven public pages cover login, registration, recovery, viewing and understanding payslips, official domain safety, support and privacy. The homepage retains the warmer design and original shared anchors. Both complete tutorial flows remain available without JavaScript.
+## Analytics and SEO
 
-## Configuration and publication
+Current CAGD favicons and the social-sharing image use dedicated `cagd-` filenames so browsers can fetch them independently of the retired artwork. Root `favicon.ico` and legacy PNG URLs also contain the current CAGD artwork. Retired SVG logo URLs redirect to the CAGD logo on the configured static hosts. Run `npm run assets:brand` after an approved logo change to regenerate the PNG/ICO/share assets. External search and link-preview caches refresh on their own schedules; a deployment cannot purge those caches.
 
-See [the complete SEO launch guide](docs/SEO-LAUNCH.md) and `.env.example`. Public values are baked into each build. Production builds use GA4 measurement ID `G-XLNK77DXEZ`; analytics runs by default on production pages. Preview builds disable it, and `PUBLIC_ANALYTICS_APPROVED=false` disables it for production too. This project does not process credentials, migrate the application or administer Keycloak.
+Production enables GTM `GTM-N27FCQBP` and GA4 `G-XLNK77DXEZ` by default. Preview output removes GTM and disables GA4. `PUBLIC_ANALYTICS_APPROVED=false` disables both. Public settings can come from deployment environment variables or `.env`; the build command controls production/preview indexing.
 
-Reviewer identities must only be added after actual review. Application migration, official contact confirmation, DNS/hosting, search account verification and official external links are release dependencies; no production deployment or search submission is performed by local builds.
+Native links load complete HTML documents, so each page visit sends one explicit page_view; browser back/forward restores are also measured. Portal links send portal_login_click. Explicit events omit URL query strings, fragments and employee details. Published GTM tags still need account-side review to avoid additional GA4 loaders/events.
 
-## Tutorial sources and images
+Run `npm run audit:live` after deployment to check pages, metadata, redirects and assets. IndexNow is an explicit post-deployment command and only accepts generated sitemap paths. It never runs during building/testing.
 
-Registration follows CAGD's [Employee PayServices Registration video](https://www.youtube.com/watch?v=wraUiX0C8wk) and its [upgraded payslip announcement](https://www.cagd.gov.gh/wp-content/uploads/2026/02/Press-Release-New-Pay-Slip.pdf). The supplied redacted images cover registration entry, employee number, Ghana Card and profile fields. Phone verification, password/security and final review use video chapter links because local screenshots were not supplied. Payslip dashboard guidance remains general until its controls are verified.
-
-The employee photograph is illustrative, AI-generated photography. Its responsive variants use the official Svelte image plugin. Keep screenshots free of personal account information and recheck them against the migrated application before release.
-
-Sanity's SEO/AEO best-practices skill informed the implementation; Sanity CMS is not installed.
-
-
-Google Tag Manager container `GTM-N27FCQBP` is included once in the shared HTML head and its noscript iframe immediately after the body opens. Analytics storage is enabled when the production analytics integration starts; advertising storage and personalisation remain denied. GA4 `G-XLNK77DXEZ` remains managed by the website integration: do not also configure that measurement ID in GTM, which would duplicate tracking. Preview HTML also contains GTM; restrict published container triggers to the production hostname and retain the advertising restrictions.
-
+See `docs/SEO-COMPETITIVE-RELEASE.md` for release dependencies, external search tools, linking materials and measurement. The code conversion preserves URLs, content and metadata; it does not migrate the application or administer Keycloak. No deployment or search submission is made automatically.

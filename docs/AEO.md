@@ -1,3 +1,5 @@
+> **14 October 2026 conversion:** The current site is plain HTML/CSS/JavaScript. See [migration notes](PLAIN-HTML-MIGRATION.md) and [README](../README.md) for the replacement file locations and hosting setup. The SvelteKit references below describe the earlier implementation.
+
 # Answer engine content
 
 Eight public pages include short question-and-answer passages backed by the existing service guides. `src/lib/answers.ts` is their single source; `DirectAnswers.svelte` renders the text in prerendered HTML, and the SEO component describes the same questions and answers in JSON-LD. Existing citations, canonical URLs, source links and breadcrumbs remain in place.

@@ -1,17 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import ts from 'typescript';
-const source = await fs.readFile('src/lib/pages.ts', 'utf8');
-const compiled = ts.transpileModule(source, {
-	compilerOptions: {
-		module: ts.ModuleKind.ESNext,
-		target: ts.ScriptTarget.ES2022,
-	},
-}).outputText;
-const { pages } = await import(
-	'data:text/javascript;base64,' + Buffer.from(compiled).toString('base64')
-);
+import { readPages } from '../scripts/read-pages.mjs';
+const { pages } = await readPages();
 const outputDir = process.env.SEO_OUTPUT_DIR || 'build';
 const sitemap = await fs.readFile(outputDir + '/sitemap.xml', 'utf8');
 const production = sitemap.includes('<loc>');
@@ -23,12 +14,24 @@ for (const page of pages) {
 			'utf8',
 		);
 		assert.equal((html.match(/<h1[\s>]/g) || []).length, 1);
-		assert.ok(html.replace(/<[^>]+>/g, '').includes(page.heading));
+		assert.ok(
+			html
+				.replace(/<[^>]+>/g, '')
+				.replace(/\s+/g, ' ')
+				.includes(page.heading),
+		);
 		assert.ok(
 			html.includes(`<title>${page.title.replaceAll('&', '&amp;')}</title>`),
 		);
 		assert.equal((html.match(/name="description"/g) || []).length, 1);
 		assert.equal((html.match(/rel="canonical"/g) || []).length, 1);
+		assert.ok(html.includes('href="/assets/cagd-favicon-192.png"'));
+		assert.ok(html.includes('href="/cagd-favicon.ico"'));
+		assert.ok(html.includes('/assets/cagd-social-card.png'));
+		assert.ok(
+			!html.includes('href="/assets/favicon.svg"') &&
+				!html.includes('href="/assets/portal-logo.svg"'),
+		);
 		assert.equal(
 			(html.match(/googletagmanager\.com\/gtm\.js/g) || []).length,
 			production ? 1 : 0,
@@ -76,7 +79,8 @@ for (const page of pages) {
 			assert.equal(question.acceptedAnswer['@type'], 'Answer');
 			const visibleText = html
 				.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '')
-				.replace(/<[^>]*>/g, '');
+				.replace(/<[^>]*>/g, '')
+				.replace(/\s+/g, ' ');
 			assert.ok(
 				visibleText.includes(question.name),
 				'Structured question must be visible',
@@ -92,7 +96,12 @@ for (const page of pages) {
 			),
 		);
 		for (const section of page.sections)
-			assert.ok(html.includes(section.heading));
+			assert.ok(
+				html
+					.replace(/<[^>]+>/g, '')
+					.replace(/\s+/g, ' ')
+					.includes(section.heading),
+			);
 		if (production)
 			assert.ok(
 				sitemap.includes(`<loc>https://www.epayslipgh.com${page.path}</loc>`),
@@ -102,7 +111,8 @@ for (const page of pages) {
 			if (
 				href.startsWith('/_app/') ||
 				href.startsWith('/assets/') ||
-				href === '/favicon.ico'
+				href === '/favicon.ico' ||
+				href === '/cagd-favicon.ico'
 			)
 				await fs.access(outputDir + href);
 			else
@@ -144,13 +154,53 @@ test('deployment files and social image exist', async () => {
 		);
 		assert.ok(config.routes.some((route) => route.handle === 'filesystem'));
 		assert.ok(
-			config.routes.some((route) => route.src === '/_app/immutable/.+'),
+			config.routes.some(
+				(route) => route.status === 308 && route.headers.Location === '/about/',
+			),
 		);
+		assert.ok(
+			config.routes.some(
+				(route) =>
+					route.src === '^/about/$' && route.dest === '/about/index.html',
+			),
+		);
+
 		assert.deepEqual(config.routes.at(-1), {
 			src: '/.*',
 			dest: '/404.html',
 			status: 404,
 		});
-		assert.ok(Object.keys(config.overrides).length > 0);
+	}
+});
+
+test('old asset URLs contain current artwork and favicon fallbacks agree', async () => {
+	assert.deepEqual(
+		await fs.readFile(outputDir + '/assets/social-card.png'),
+		await fs.readFile(outputDir + '/assets/cagd-social-card.png'),
+	);
+	assert.deepEqual(
+		await fs.readFile(outputDir + '/favicon.ico'),
+		await fs.readFile(outputDir + '/cagd-favicon.ico'),
+	);
+	assert.deepEqual(
+		await fs.readFile(outputDir + '/assets/favicon-192.png'),
+		await fs.readFile(outputDir + '/assets/cagd-favicon-192.png'),
+	);
+	for (const path of ['assets/favicon.svg', 'assets/portal-logo.svg'])
+		await assert.rejects(fs.access(outputDir + '/' + path));
+	const redirects = await fs.readFile(outputDir + '/_redirects', 'utf8');
+	assert.ok(
+		redirects.includes('/assets/favicon.svg /assets/cagd-logo.png 308'),
+	);
+	if (outputDir === '.vercel/output/static') {
+		const config = JSON.parse(
+			await fs.readFile('.vercel/output/config.json', 'utf8'),
+		);
+		for (const path of ['/assets/favicon.svg', '/assets/portal-logo.svg']) {
+			const rule = config.routes.find(
+				(route) => route.status === 308 && new RegExp(route.src).test(path),
+			);
+			assert.equal(rule?.headers.Location, '/assets/cagd-logo.png');
+		}
 	}
 });

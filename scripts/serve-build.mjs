@@ -1,13 +1,15 @@
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-const root = path.resolve('build');
+const root = path.resolve(process.env.SEO_OUTPUT_DIR || 'build');
+const port = Number(process.env.PORT || 4173);
 const types = {
 	'.html': 'text/html; charset=utf-8',
 	'.css': 'text/css',
 	'.js': 'text/javascript',
 	'.svg': 'image/svg+xml',
 	'.png': 'image/png',
+	'.ico': 'image/x-icon',
 	'.webp': 'image/webp',
 	'.avif': 'image/avif',
 	'.xml': 'application/xml',
@@ -51,6 +53,6 @@ http
 			res.writeHead(400).end();
 		}
 	})
-	.listen(4173, '127.0.0.1', () =>
-		console.log('Built site: http://127.0.0.1:4173'),
+	.listen(port, '127.0.0.1', () =>
+		console.log(`Built site: http://127.0.0.1:${port}`),
 	);

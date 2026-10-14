@@ -1,3 +1,5 @@
+> **14 October 2026 conversion:** The current site is plain HTML/CSS/JavaScript. See [migration notes](PLAIN-HTML-MIGRATION.md) and [README](../README.md) for the replacement file locations and hosting setup. The SvelteKit references below describe the earlier implementation.
+
 # Competitive SEO release and measurement
 
 Implementation date: 12 October 2026. Public site: https://www.epayslipgh.com/.

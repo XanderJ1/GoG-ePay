@@ -1,20 +1,28 @@
 import fs from 'node:fs/promises';
 import sharp from 'sharp';
 
-const logo = 'static/assets/cagd-logo.png';
+const logo = 'site/assets/cagd-logo.png';
 for (const [name, size] of [
 	['favicon-32.png', 32],
 	['favicon-192.png', 192],
 	['apple-touch-icon.png', 180],
 ]) {
-	await sharp(logo).resize(size, size, { fit: 'contain', background: '#ffffff' })
-		.png().toFile(`static/assets/${name}`);
+	await sharp(logo)
+		.resize(size, size, { fit: 'contain', background: '#ffffff' })
+		.png()
+		.toFile(`site/assets/${name}`);
 }
 
 // ICO directory entries containing PNG images are supported by modern browsers.
 const sizes = [16, 32, 48];
-const images = await Promise.all(sizes.map(size => sharp(logo)
-	.resize(size, size, { fit: 'contain', background: '#ffffff' }).png().toBuffer()));
+const images = await Promise.all(
+	sizes.map((size) =>
+		sharp(logo)
+			.resize(size, size, { fit: 'contain', background: '#ffffff' })
+			.png()
+			.toBuffer(),
+	),
+);
 const directory = Buffer.alloc(6 + sizes.length * 16);
 directory.writeUInt16LE(1, 2);
 directory.writeUInt16LE(sizes.length, 4);
@@ -29,4 +37,13 @@ for (let i = 0; i < sizes.length; i++) {
 	directory.writeUInt32LE(offset, entry + 12);
 	offset += images[i].length;
 }
-await fs.writeFile('static/favicon.ico', Buffer.concat([directory, ...images]));
+await fs.writeFile('site/favicon.ico', Buffer.concat([directory, ...images]));
+await fs.copyFile('site/favicon.ico', 'site/cagd-favicon.ico');
+await fs.copyFile(
+	'site/assets/favicon-192.png',
+	'site/assets/cagd-favicon-192.png',
+);
+await fs.copyFile(
+	'site/assets/apple-touch-icon.png',
+	'site/assets/cagd-apple-touch-icon.png',
+);

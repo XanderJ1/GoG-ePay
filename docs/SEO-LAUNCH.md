@@ -1,3 +1,5 @@
+> **14 October 2026 conversion:** The current site is plain HTML/CSS/JavaScript. See [migration notes](PLAIN-HTML-MIGRATION.md) and [README](../README.md) for the replacement file locations and hosting setup. The SvelteKit references below describe the earlier implementation.
+
 See [the competitive release checklist](SEO-COMPETITIVE-RELEASE.md) for the latest controls, account dependencies and measurement procedure.
 
 # GoG ePay SEO launch and operating guide

@@ -1,25 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs/promises';
-import ts from 'typescript';
-let importId = 0;
+import { getConfig, robots, sitemap } from '../scripts/site-config.mjs';
+import { readPages } from '../scripts/read-pages.mjs';
 async function loadConfig(env) {
-	const source = (
-		await fs.readFile(new URL('../src/lib/config.ts', import.meta.url), 'utf8')
-	).replace(
-		"import * as publicEnv from '$env/static/public';",
-		'const publicEnv = ' + JSON.stringify(env) + ';',
-	);
-	const compiled = ts.transpileModule(source, {
-		compilerOptions: {
-			module: ts.ModuleKind.ESNext,
-			target: ts.ScriptTarget.ES2022,
-		},
-	}).outputText;
-	return import(
-		'data:text/javascript;base64,' +
-			Buffer.from(compiled + '\n// ' + importId++).toString('base64')
-	);
+	return getConfig(env);
 }
 test('default destination uses the separate employee application', async () => {
 	const config = await loadConfig({});
@@ -59,33 +43,14 @@ test('reject public site values that would generate incorrect canonical URLs', a
 });
 
 async function loadEndpoint(path, siteUrl) {
-	let source = (
-		await fs.readFile(
-			new URL('../src/routes/' + path + '/+server.ts', import.meta.url),
-			'utf8',
-		)
-	).replace(
-		"import { SITE_URL, INDEXABLE } from '$lib/config';",
-		'const INDEXABLE = ' +
-			Boolean(siteUrl) +
-			'; const SITE_URL = ' +
-			JSON.stringify(siteUrl) +
-			';',
-	);
-	const pagesSource = await fs.readFile(
-		new URL('../src/lib/pages.ts', import.meta.url),
-		'utf8',
-	);
-	source = source.replace("import { pages } from '$lib/pages';", pagesSource);
-	const compiled = ts.transpileModule(source, {
-		compilerOptions: {
-			module: ts.ModuleKind.ESNext,
-			target: ts.ScriptTarget.ES2022,
-		},
-	}).outputText;
-	return import(
-		'data:text/javascript;base64,' + Buffer.from(compiled).toString('base64')
-	);
+	const config = { SITE_URL: siteUrl, INDEXABLE: Boolean(siteUrl) };
+	const content = await readPages();
+	return {
+		GET: () =>
+			new Response(
+				path === 'robots.txt' ? robots(config) : sitemap(content.pages, config),
+			),
+	};
 }
 test('public metadata endpoints use the configured host', async () => {
 	const robots = await loadEndpoint(

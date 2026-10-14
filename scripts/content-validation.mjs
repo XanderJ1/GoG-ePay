@@ -1,29 +1,6 @@
-import fs from 'node:fs/promises';
-import ts from 'typescript';
+import { readPages } from './read-pages.mjs';
 export async function loadContent() {
-	const pageSource = await fs.readFile('src/lib/pages.ts', 'utf8');
-	const compile = (s) =>
-		ts.transpileModule(s, {
-			compilerOptions: {
-				module: ts.ModuleKind.ESNext,
-				target: ts.ScriptTarget.ES2022,
-			},
-		}).outputText;
-	const pages = (
-		await import(
-			'data:text/javascript;base64,' +
-				Buffer.from(compile(pageSource)).toString('base64')
-		)
-	).pages;
-	const answers = (
-		await import(
-			'data:text/javascript;base64,' +
-				Buffer.from(
-					compile(await fs.readFile('src/lib/answers.ts', 'utf8')),
-				).toString('base64')
-		)
-	).answersByPath;
-	return { pages, answers };
+	return readPages();
 }
 export function validateDate(
 	date,
