@@ -2,6 +2,9 @@
 	import { PORTAL_URL } from '$lib/config';
 	import Icon from './Icon.svelte';
 	import { mainLinks } from '$lib/pages';
+
+	let { theme = 'light' }: { theme?: 'light' | 'dark' } = $props();
+
 	let mobileMenu: HTMLDetailsElement;
 	function closeMenu(restoreFocus = false) {
 		if (!mobileMenu?.open) return;
@@ -26,7 +29,7 @@
 	onresize={() => closeMenu()}
 />
 <a class="skip" href="#main" onclick={() => closeMenu()}>Skip to content</a>
-<div class="utility">
+<div class="utility" class:utility-dark={theme === 'dark'}>
 	<div class="container">
 		<span
 			><i class="flag" aria-hidden="true"></i> Government of Ghana
@@ -38,11 +41,11 @@
 	{#each mainLinks as link}<a href={link.path} onclick={() => closeMenu()}
 			>{link.label}</a
 		>{/each}
-	<a class="button small" href={PORTAL_URL} onclick={() => closeMenu()}
+	<a class="button small header-action-btn" href={PORTAL_URL} onclick={() => closeMenu()}
 		>Log in to portal</a
 	>
 {/snippet}
-<header>
+<header class:header-dark={theme === 'dark'}>
 	<div class="container navigation">
 		<a
 			class="brand"
